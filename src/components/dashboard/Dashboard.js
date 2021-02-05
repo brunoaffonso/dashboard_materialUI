@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -21,7 +21,8 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems, secondaryListItems } from './listItems';
 import Chart from './Chart';
 import Deposits from './Deposits';
-import Orders from './Orders';
+import Materiais from './Materiais';
+import * as api from '../../api/serviceApi';
 
 function Copyright() {
   return (
@@ -118,6 +119,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Dashboard() {
+  const [material, setMaterial] = useState([]);
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -127,6 +129,15 @@ export default function Dashboard() {
     setOpen(false);
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+
+  const getMateriais = async () => {
+    const mats = await api.Materiais();
+    setMaterial(mats);
+  };
+
+  useEffect(() => {
+    getMateriais();
+  }, []);
 
   return (
     <div className={classes.root}>
@@ -200,7 +211,7 @@ export default function Dashboard() {
             {/* Recent Orders */}
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                <Orders />
+                <Materiais matarialList={material} />
               </Paper>
             </Grid>
           </Grid>
