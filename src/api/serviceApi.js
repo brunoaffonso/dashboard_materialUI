@@ -50,9 +50,9 @@ export async function Materiais() {
   const res = await axios.get(apiMateriaisUrl);
 
   const mats = res.data.map((mat) => {
-    const { id, numero_item, descricao, quantidade_ano, valor } = mat;
+    const { id_material, numero_item, descricao, quantidade_ano, valor } = mat;
     return {
-      id,
+      id_material,
       numero_item,
       descricao,
       quantidade_ano,
@@ -60,6 +60,16 @@ export async function Materiais() {
     };
   });
   return mats;
+}
+
+export async function InsertMaterial(value) {
+  const response = await axios.post(apiMateriaisUrl, value);
+  return response.data;
+}
+
+export async function DeleteMaterial(id) {
+  const response = await axios.delete(`${apiMateriaisUrl}${id}`);
+  return response.data;
 }
 
 export async function Estoque() {

@@ -203,7 +203,7 @@ export default function Dashboard() {
             </Grid>
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                <Materiais matarialList={material} />
+                <Materiais matarialList={material} onUpdate={getMateriais} />
               </Paper>
             </Grid>
           </Grid>

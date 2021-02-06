@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import Link from '@material-ui/core/Link';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -8,6 +7,10 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Title from './Title';
 import AddMaterialModal from './AddMaterialModal';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import * as api from '../../api/serviceApi';
 
 // function preventDefault(event) {
 //   event.preventDefault();
@@ -19,7 +22,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Materiais({ matarialList }) {
+export default function Materiais({ matarialList, onUpdate }) {
+  const deleteMaterial = async (id) => {
+    await api.DeleteMaterial(id);
+    onUpdate();
+  };
   const classes = useStyles();
   return (
     <React.Fragment>
@@ -31,6 +38,7 @@ export default function Materiais({ matarialList }) {
             <TableCell>Descrição</TableCell>
             <TableCell>Quantidade Anual</TableCell>
             <TableCell>Valor</TableCell>
+            <TableCell> </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -40,12 +48,22 @@ export default function Materiais({ matarialList }) {
               <TableCell>{mat.descricao}</TableCell>
               <TableCell>{mat.quantidade_ano}</TableCell>
               <TableCell>{mat.valor}</TableCell>
+              <TableCell>
+                <IconButton aria-label="edit" className={classes.margin}>
+                  <EditIcon onClick={(e) => console.log(mat.id_material)} />
+                </IconButton>
+                <IconButton aria-label="delete" className={classes.margin}>
+                  <DeleteIcon
+                    onClick={(e) => deleteMaterial(mat.id_material)}
+                  />
+                </IconButton>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
       <div className={classes.seeMore}>
-        <AddMaterialModal />
+        <AddMaterialModal onUpdate={onUpdate} />
       </div>
     </React.Fragment>
   );
