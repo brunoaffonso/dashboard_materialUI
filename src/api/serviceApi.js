@@ -48,18 +48,18 @@ export async function Contrato() {
 
 export async function Materiais() {
   const res = await axios.get(apiMateriaisUrl);
-
-  const mats = res.data.map((mat) => {
-    const { id_material, numero_item, descricao, quantidade_ano, valor } = mat;
-    return {
-      id_material,
-      numero_item,
-      descricao,
-      quantidade_ano,
-      valor,
-    };
-  });
-  return mats;
+  // const mats = res.data.map((mat) => {
+  //   const { id_material, numero_item, descricao, quantidade_ano, valor, comentarios } = mat;
+  //   return {
+  //     id_material,
+  //     numero_item,
+  //     descricao,
+  //     quantidade_ano,
+  //     valor,
+  //     comentarios
+  //   };
+  // });
+  return res.data;
 }
 
 export async function InsertMaterial(value) {
@@ -70,6 +70,10 @@ export async function InsertMaterial(value) {
 export async function DeleteMaterial(id) {
   const response = await axios.delete(`${apiMateriaisUrl}${id}`);
   return response.data;
+}
+
+export async function EditMaterial(id, value) {
+  const response = await axios.post(`${apiMateriaisUrl}${id}`, value);
 }
 
 export async function Estoque() {

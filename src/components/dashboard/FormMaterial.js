@@ -1,42 +1,54 @@
-import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useState, useEffect } from 'react';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
 import * as api from '../../api/serviceApi';
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    position: 'absolute',
-    width: 300,
-    backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
-  },
-}));
+export default function FormMaterial({ onSave, material, setNull }) {
+  const [id, setId] = useState(null);
+  const [numeroItem, setNumeroItem] = useState('');
+  const [descricao, setDescricao] = useState('');
+  const [quantidadeAnual, setQuantidadeAnual] = useState('');
+  const [tipoUnidade, setTipoUnidade] = useState('');
+  const [valor, setValor] = useState('');
+  const [obs, setObs] = useState('');
 
-function getModalStyle() {
-  const top = 50;
-  const left = 50;
-
-  return {
-    top: `${top}%`,
-    left: `${left}%`,
-    transform: `translate(-${top}%, -${left}%)`,
+  const setData = (data) => {
+    setId(data.id_material);
+    setNumeroItem(data.numero_item);
+    setDescricao(data.descricao);
+    setQuantidadeAnual(data.quantidade_ano);
+    setTipoUnidade(data.tipo_unidade);
+    setValor(data.valor);
+    setObs(data.comentarios);
   };
-}
 
-export default function FormMaterial({ onSave }) {
-  const [numeroItem, setNumeroItem] = useState(null);
-  const [descricao, setDescricao] = useState(null);
-  const [quantidadeAnual, setQuantidadeAnual] = useState(null);
-  const [tipoUnidade, setTipoUnidade] = useState(null);
-  const [valor, setValor] = useState(null);
-  const [obs, setObs] = useState(null);
-  const classes = useStyles();
-  const [modalStyle] = React.useState(getModalStyle);
+  // if (material) {
+  //   setData(material);
+  // }
+
+  const clearData = () => {
+    setId(null);
+    setNumeroItem('');
+    setDescricao('');
+    setQuantidadeAnual('');
+    setTipoUnidade('');
+    setValor('');
+    setObs('');
+    setNull();
+  };
+
+  useEffect(() => {
+    if (material) {
+      setData(material);
+    }
+  }, [material]);
+
+  const handleClearData = (event) => {
+    event.preventDefault();
+    clearData();
+  };
 
   const handleButton = async (event) => {
     event.preventDefault();
@@ -48,67 +60,78 @@ export default function FormMaterial({ onSave }) {
       valor: valor,
       comentarios: obs,
     };
-    await api.InsertMaterial(data);
+    if (id) {
+      await api.EditMaterial(id, data);
+    } else {
+      await api.InsertMaterial(data);
+    }
     onSave();
+    clearData();
   };
   return (
     <div>
-      <div style={modalStyle} className={classes.paper}>
-        <h2 id="simple-modal-title">Adicionar Material</h2>
-        <form className={classes.root} noValidate autoComplete="off">
-          <FormControl className={classes.formControl}>
+      <h2>Adicionar Material {id && <span>({id})</span>}</h2>
+      <form noValidate autoComplete="off">
+        <FormControl>
+          <TextField
+            label="Número do Item"
+            value={numeroItem}
+            onChange={(e) => setNumeroItem(e.target.value)}
+          />
+          <TextField
+            label="Descrição"
+            value={descricao}
+            onChange={(e) => setDescricao(e.target.value)}
+          />
+          <TextField
+            label="Quantidade Anual"
+            value={quantidadeAnual}
+            onChange={(e) => setQuantidadeAnual(e.target.value)}
+          />
+          <FormControl>
             <TextField
-              label="Número do Item"
-              value={numeroItem}
-              onChange={(e) => setNumeroItem(e.target.value)}
-            />
-            <TextField
-              label="Descrição"
-              value={descricao}
-              onChange={(e) => setDescricao(e.target.value)}
-            />
-            <TextField
-              label="Quantidade Anual"
-              value={quantidadeAnual}
-              onChange={(e) => setQuantidadeAnual(e.target.value)}
-            />
-            <FormControl className={classes.formControl}>
-              <TextField
-                select
-                label="Tipo Unidade"
-                value={tipoUnidade}
-                onChange={(e) => setTipoUnidade(e.target.value)}
-              >
-                <MenuItem key={''} value={'u'}>
-                  Unidade
-                </MenuItem>
-                <MenuItem key={''} value={'m'}>
-                  Metro
-                </MenuItem>
-              </TextField>
-            </FormControl>
-
-            <TextField
-              label="Valor"
-              value={valor}
-              onChange={(e) => setValor(e.target.value)}
-            />
-            <TextField
-              label="Observações"
-              value={obs}
-              onChange={(e) => setObs(e.target.value)}
-            />
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              onClick={(e) => handleButton(e)}
+              select
+              label="Tipo Unidade"
+              value={tipoUnidade}
+              onChange={(e) => setTipoUnidade(e.target.value)}
             >
-              Enviar
-            </Button>
+              <MenuItem key={'u'} value={'u'}>
+                Unidade
+              </MenuItem>
+              <MenuItem key={'m'} value={'m'}>
+                Metro
+              </MenuItem>
+            </TextField>
           </FormControl>
-        </form>
-      </div>
+
+          <TextField
+            label="Valor"
+            value={valor}
+            onChange={(e) => setValor(e.target.value)}
+          />
+          <TextField
+            label="Observações"
+            value={obs}
+            onChange={(e) => setObs(e.target.value)}
+          />
+        </FormControl>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          onClick={(e) => handleButton(e)}
+        >
+          Enviar
+        </Button>
+        <Button
+          type="submit"
+          variant="contained"
+          color="secundary"
+          onClick={(e) => handleClearData(e)}
+        >
+          Limpar
+        </Button>
+      </form>
     </div>
   );
 }

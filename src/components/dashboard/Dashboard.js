@@ -18,10 +18,12 @@ import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import { mainListItems, secondaryListItems } from './listItems';
 import Chart from './Chart';
 import Materiais from './Materiais';
 import * as api from '../../api/serviceApi';
+import FormMaterial from './FormMaterial';
+import MainListItems from './MainListItems';
+import SecundaryListItems from './SecundaryListItems';
 
 function Copyright() {
   return (
@@ -118,7 +120,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Dashboard() {
+  const [menu, setMenu] = useState('dashboard');
   const [material, setMaterial] = useState([]);
+  const [selectedMaterial, setSelectedMaterial] = useState(null);
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -132,6 +136,21 @@ export default function Dashboard() {
   const getMateriais = async () => {
     const mats = await api.Materiais();
     setMaterial(mats);
+  };
+
+  const setNull = () => {
+    setSelectedMaterial(null);
+  };
+
+  const editMaterial = (mat) => {
+    const [res] = material.filter(
+      (m) => parseInt(m.id_material) === parseInt(mat)
+    );
+    setSelectedMaterial(res);
+  };
+
+  const setItem = (item) => {
+    setMenu(item);
   };
 
   useEffect(() => {
@@ -187,25 +206,47 @@ export default function Dashboard() {
           </IconButton>
         </div>
         <Divider />
-        <List>{mainListItems}</List>
+        <List>
+          <MainListItems setMenu={setItem} />
+        </List>
         <Divider />
-        <List>{secondaryListItems}</List>
+        <List>
+          <SecundaryListItems />
+        </List>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
-            {/* Chart */}
-            <Grid item xs={12} md={8} lg={9}>
-              <Paper className={fixedHeightPaper}>
-                <Chart />
-              </Paper>
-            </Grid>
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>
-                <Materiais matarialList={material} onUpdate={getMateriais} />
-              </Paper>
-            </Grid>
+            {menu === 'dashboard' && (
+              <Grid item xs={12} md={8} lg={9}>
+                <Paper className={fixedHeightPaper}>
+                  <Chart />
+                </Paper>
+              </Grid>
+            )}
+            {menu === 'material' && (
+              <>
+                <Grid item xs={9}>
+                  <Paper className={classes.paper}>
+                    <Materiais
+                      matarialList={material}
+                      onUpdate={getMateriais}
+                      editMaterial={editMaterial}
+                    />
+                  </Paper>
+                </Grid>
+                <Grid item xs={3}>
+                  <Paper className={classes.paper}>
+                    <FormMaterial
+                      onSave={getMateriais}
+                      material={selectedMaterial}
+                      setNull={setNull}
+                    />
+                  </Paper>
+                </Grid>
+              </>
+            )}
           </Grid>
           <Box pt={4}>
             <Copyright />

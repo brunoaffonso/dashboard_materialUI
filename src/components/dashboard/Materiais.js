@@ -6,7 +6,6 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Title from './Title';
-import AddMaterialModal from './AddMaterialModal';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
@@ -22,11 +21,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Materiais({ matarialList, onUpdate }) {
+export default function Materiais({ matarialList, onUpdate, editMaterial }) {
   const deleteMaterial = async (id) => {
     await api.DeleteMaterial(id);
     onUpdate();
   };
+
   const classes = useStyles();
   return (
     <React.Fragment>
@@ -50,7 +50,7 @@ export default function Materiais({ matarialList, onUpdate }) {
               <TableCell>{mat.valor}</TableCell>
               <TableCell>
                 <IconButton aria-label="edit" className={classes.margin}>
-                  <EditIcon onClick={(e) => console.log(mat.id_material)} />
+                  <EditIcon onClick={() => editMaterial(mat.id_material)} />
                 </IconButton>
                 <IconButton aria-label="delete" className={classes.margin}>
                   <DeleteIcon
@@ -62,9 +62,6 @@ export default function Materiais({ matarialList, onUpdate }) {
           ))}
         </TableBody>
       </Table>
-      <div className={classes.seeMore}>
-        <AddMaterialModal onUpdate={onUpdate} />
-      </div>
     </React.Fragment>
   );
 }
