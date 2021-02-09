@@ -24,6 +24,13 @@ import * as api from '../../api/serviceApi';
 import FormMaterial from './FormMaterial';
 import MainListItems from './MainListItems';
 import SecundaryListItems from './SecundaryListItems';
+import Unidades from './Unidades';
+import FormUnidade from './FormUnidade';
+import Departamentos from './Departamentos';
+import FormDepartamento from './FormDepartamento';
+import Setores from './Setores';
+import FormSetor from './FormSetor';
+import Title from './Title';
 
 function Copyright() {
   return (
@@ -123,11 +130,19 @@ export default function Dashboard() {
   const [menu, setMenu] = useState('dashboard');
   const [material, setMaterial] = useState([]);
   const [selectedMaterial, setSelectedMaterial] = useState(null);
+  const [unidade, setUnidade] = useState([]);
+  const [selectedUnidade, setSelectedUnidade] = useState(null);
+  const [departamento, setDepartamento] = useState([]);
+  const [selectedDepartamento, setSelectedDepartamento] = useState(null);
+  const [setor, setSetor] = useState([]);
+  const [selectedSetor, setSelectedSetor] = useState(null);
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
+
   const handleDrawerClose = () => {
     setOpen(false);
   };
@@ -138,8 +153,33 @@ export default function Dashboard() {
     setMaterial(mats);
   };
 
+  const getUnidades = async () => {
+    const unidades = await api.Unidade();
+    setUnidade(unidades);
+  };
+
+  const getDepartamentos = async () => {
+    const departamentos = await api.Departamento();
+    setDepartamento(departamentos);
+  };
+
+  const getSetores = async () => {
+    const setores = await api.Setor();
+    setSetor(setores);
+  };
+
+  const showData = () => {
+    console.log(unidade);
+    console.log(material);
+    console.log(departamento);
+    console.log(setor);
+  };
+
   const setNull = () => {
     setSelectedMaterial(null);
+    setSelectedUnidade(null);
+    setSelectedDepartamento(null);
+    setSelectedSetor(null);
   };
 
   const editMaterial = (mat) => {
@@ -149,12 +189,34 @@ export default function Dashboard() {
     setSelectedMaterial(res);
   };
 
+  const editUnidade = (unid) => {
+    const [res] = unidade.filter(
+      (u) => parseInt(u.id_unidade) === parseInt(unid)
+    );
+    setSelectedUnidade(res);
+  };
+
+  const editDepartamento = (depto) => {
+    const [res] = departamento.filter(
+      (d) => parseInt(d.id_departamento) === parseInt(depto)
+    );
+    setSelectedDepartamento(res);
+  };
+
+  const editSetor = (set) => {
+    const [res] = setor.filter((d) => parseInt(d.id_setor) === parseInt(set));
+    setSelectedSetor(res);
+  };
+
   const setItem = (item) => {
     setMenu(item);
   };
 
   useEffect(() => {
     getMateriais();
+    getUnidades();
+    getDepartamentos();
+    getSetores();
   }, []);
 
   return (
@@ -219,20 +281,114 @@ export default function Dashboard() {
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             {menu === 'dashboard' && (
-              <Grid item xs={12} md={8} lg={9}>
-                <Paper className={fixedHeightPaper}>
-                  <Chart />
-                </Paper>
-              </Grid>
+              <>
+                <Grid item xs={12} md={8} lg={9}>
+                  <Paper className={fixedHeightPaper}>
+                    <Chart />
+                  </Paper>
+                </Grid>
+                <Grid item xs={3}>
+                  <Paper className={classes.paper}>
+                    <Title>Materiais Cadastrados</Title>
+                    <Typography component="p" variant="h4">
+                      {material.length}
+                    </Typography>
+                    <Typography
+                      color="textSecondary"
+                      className={classes.depositContext}
+                    >
+                      {Date()}
+                    </Typography>
+                    <div>
+                      <Link
+                        color="primary"
+                        href="#"
+                        onClick={() => setMenu('material')}
+                      >
+                        Detalhes
+                      </Link>
+                    </div>
+                  </Paper>
+                </Grid>
+                <Grid item xs={3}>
+                  <Paper className={classes.paper}>
+                    <Title>Unidades Cadastrados</Title>
+                    <Typography component="p" variant="h4">
+                      {unidade.length}
+                    </Typography>
+                    <Typography
+                      color="textSecondary"
+                      className={classes.depositContext}
+                    >
+                      {Date()}
+                    </Typography>
+                    <div>
+                      <Link
+                        color="primary"
+                        href="#"
+                        onClick={() => setMenu('unidade')}
+                      >
+                        Detalhes
+                      </Link>
+                    </div>
+                  </Paper>
+                </Grid>
+                <Grid item xs={3}>
+                  <Paper className={classes.paper}>
+                    <Title>Departamentos Cadastrados</Title>
+                    <Typography component="p" variant="h4">
+                      {departamento.length}
+                    </Typography>
+                    <Typography
+                      color="textSecondary"
+                      className={classes.depositContext}
+                    >
+                      {Date()}
+                    </Typography>
+                    <div>
+                      <Link
+                        color="primary"
+                        href="#"
+                        onClick={() => setMenu('departamento')}
+                      >
+                        Detalhes
+                      </Link>
+                    </div>
+                  </Paper>
+                </Grid>
+                <Grid item xs={3}>
+                  <Paper className={classes.paper}>
+                    <Title>Setores Cadastrados</Title>
+                    <Typography component="p" variant="h4">
+                      {setor.length}
+                    </Typography>
+                    <Typography
+                      color="textSecondary"
+                      className={classes.depositContext}
+                    >
+                      {Date()}
+                    </Typography>
+                    <div>
+                      <Link
+                        color="primary"
+                        href="#"
+                        onClick={() => setMenu('setor')}
+                      >
+                        Detalhes
+                      </Link>
+                    </div>
+                  </Paper>
+                </Grid>
+              </>
             )}
             {menu === 'material' && (
               <>
                 <Grid item xs={9}>
                   <Paper className={classes.paper}>
                     <Materiais
-                      matarialList={material}
+                      listItems={material}
                       onUpdate={getMateriais}
-                      editMaterial={editMaterial}
+                      editItem={editMaterial}
                     />
                   </Paper>
                 </Grid>
@@ -240,7 +396,79 @@ export default function Dashboard() {
                   <Paper className={classes.paper}>
                     <FormMaterial
                       onSave={getMateriais}
-                      material={selectedMaterial}
+                      items={selectedMaterial}
+                      setNull={setNull}
+                    />
+                  </Paper>
+                </Grid>
+              </>
+            )}
+            {menu === 'unidade' && (
+              <>
+                <Grid item xs={9}>
+                  <Paper className={classes.paper}>
+                    <Unidades
+                      listItems={unidade}
+                      onUpdate={getUnidades}
+                      editItem={editUnidade}
+                    />
+                  </Paper>
+                </Grid>
+                <Grid item xs={3}>
+                  <Paper className={classes.paper}>
+                    <FormUnidade
+                      onSave={getUnidades}
+                      items={selectedUnidade}
+                      setNull={setNull}
+                    />
+                  </Paper>
+                </Grid>
+              </>
+            )}
+            {menu === 'departamento' && (
+              <>
+                <Grid item xs={9}>
+                  <Paper className={classes.paper}>
+                    <Departamentos
+                      listItems={departamento}
+                      unidades={unidade}
+                      onUpdate={getDepartamentos}
+                      editItem={editDepartamento}
+                    />
+                  </Paper>
+                </Grid>
+                <Grid item xs={3}>
+                  <Paper className={classes.paper}>
+                    <FormDepartamento
+                      onSave={getDepartamentos}
+                      unidades={unidade}
+                      items={selectedDepartamento}
+                      setNull={setNull}
+                    />
+                  </Paper>
+                </Grid>
+              </>
+            )}
+            {menu === 'setor' && (
+              <>
+                <Grid item xs={9}>
+                  <Paper className={classes.paper}>
+                    <Setores
+                      listItems={setor}
+                      unidades={unidade}
+                      departamentos={departamento}
+                      onUpdate={getSetores}
+                      editItem={editSetor}
+                    />
+                  </Paper>
+                </Grid>
+                <Grid item xs={3}>
+                  <Paper className={classes.paper}>
+                    <FormSetor
+                      onSave={getSetores}
+                      unidades={unidade}
+                      departamentos={departamento}
+                      items={selectedSetor}
                       setNull={setNull}
                     />
                   </Paper>

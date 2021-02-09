@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const apiUnidadesUrl = 'http://127.0.0.1:3001/unidade/';
-const apiDepartamentoUrl = 'http://127.0.0.1:3001/departamento/';
-const apiSetorUrl = 'http://127.0.0.1:3001/core/setor/';
+const apiDepartamentoUrl = 'http://localhost:3001/departamento/';
+const apiSetorUrl = 'http://127.0.0.1:3001/setor/';
 const apiContratoUrl = 'http://127.0.0.1:3001/contrato/';
 const apiMateriaisUrl = 'http://127.0.0.1:3001/material/';
 const apiEstoqueUrl = 'http://127.0.0.1:3001/estoque/';
@@ -11,11 +11,6 @@ const apiMatServUrl = 'http://127.0.0.1:3001/matserv/';
 
 export async function Unidade() {
   const res = await axios.get(apiUnidadesUrl);
-  // console.log(res.data);
-  // const results = res.data.map((item) => {
-  //   const { id, name } = item;
-  //   return { id, name };
-  // });
   return res.data;
 }
 
@@ -24,20 +19,55 @@ export async function insertUnidade(value) {
   return response.data.id;
 }
 
+export async function EditUnidade(id, value) {
+  const response = await axios.post(`${apiUnidadesUrl}${id}`, value);
+  return response.data;
+}
+
+export async function DeleteUnidade(id) {
+  const response = await axios.delete(`${apiUnidadesUrl}${id}`);
+  return response.data;
+}
+
 export async function Departamento() {
   const res = await axios.get(apiDepartamentoUrl);
-  // console.log(res.data);
-  // const results = res.data.map((item) => {
-  //   const { id, name, unidade } = item;
-  //   return { departamento: item.name };
-  // });
   return res.data;
+}
+
+export async function insertDepartamento(value) {
+  const response = await axios.post(apiDepartamentoUrl, value);
+  return response.data.id;
+}
+
+export async function EditDepartamento(id, value) {
+  const response = await axios.post(`${apiDepartamentoUrl}${id}`, value);
+  return response.data;
+}
+
+export async function DeleteDepartamento(id) {
+  const response = await axios.delete(`${apiDepartamentoUrl}${id}`);
+  return response.data;
 }
 
 export async function Setor() {
   const res = await axios.get(apiSetorUrl);
   // console.log(res.data);
   return res.data;
+}
+
+export async function insertSetor(value) {
+  const response = await axios.post(apiSetorUrl, value);
+  return response.data.id;
+}
+
+export async function EditSetor(id, value) {
+  const response = await axios.post(`${apiSetorUrl}${id}`, value);
+  return response.data;
+}
+
+export async function DeleteSetor(id) {
+  const response = await axios.delete(`${apiSetorUrl}${id}`);
+  return response.data;
 }
 
 export async function Contrato() {
@@ -48,17 +78,6 @@ export async function Contrato() {
 
 export async function Materiais() {
   const res = await axios.get(apiMateriaisUrl);
-  // const mats = res.data.map((mat) => {
-  //   const { id_material, numero_item, descricao, quantidade_ano, valor, comentarios } = mat;
-  //   return {
-  //     id_material,
-  //     numero_item,
-  //     descricao,
-  //     quantidade_ano,
-  //     valor,
-  //     comentarios
-  //   };
-  // });
   return res.data;
 }
 
@@ -74,6 +93,7 @@ export async function DeleteMaterial(id) {
 
 export async function EditMaterial(id, value) {
   const response = await axios.post(`${apiMateriaisUrl}${id}`, value);
+  return response.data;
 }
 
 export async function Estoque() {

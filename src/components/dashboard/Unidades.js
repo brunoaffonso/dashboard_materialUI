@@ -23,40 +23,36 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Materiais({ listItems, onUpdate, editItem }) {
+export default function Unidades({ listItems, onUpdate, editItem }) {
   const deleteItem = async (id) => {
-    await api.DeleteMaterial(id);
+    await api.DeleteUnidade(id);
     onUpdate();
   };
 
   const classes = useStyles();
   return (
     <React.Fragment>
-      <Title>Materiais</Title>
+      <Title>Unidades</Title>
       <TableContainer component={Paper}>
         <Table className={classes.table} size="small">
           <TableHead>
             <TableRow>
-              <TableCell>N. Item</TableCell>
-              <TableCell>Descrição</TableCell>
-              <TableCell>Quantidade Anual</TableCell>
-              <TableCell>Valor</TableCell>
+              <TableCell>ID</TableCell>
+              <TableCell>Unidade</TableCell>
               <TableCell> </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {listItems.map((mat) => (
-              <TableRow key={mat.id_material}>
-                <TableCell>{mat.numero_item}</TableCell>
-                <TableCell>{mat.descricao}</TableCell>
-                <TableCell>{mat.quantidade_ano}</TableCell>
-                <TableCell>{mat.valor}</TableCell>
+            {listItems.map((unid) => (
+              <TableRow key={unid.id_unidade}>
+                <TableCell>{unid.id_unidade}</TableCell>
+                <TableCell>{unid.name}</TableCell>
                 <TableCell>
                   <IconButton aria-label="edit" className={classes.margin}>
-                    <EditIcon onClick={() => editItem(mat.id_material)} />
+                    <EditIcon onClick={() => editItem(unid.id_unidade)} />
                   </IconButton>
                   <IconButton aria-label="delete" className={classes.margin}>
-                    <DeleteIcon onClick={() => deleteItem(mat.id_material)} />
+                    <DeleteIcon onClick={() => deleteItem(unid.id_unidade)} />
                   </IconButton>
                 </TableCell>
               </TableRow>

@@ -20,6 +20,24 @@ export default function MainListItems({ setMenu }) {
         </ListItemIcon>
         <ListItemText primary="Materiais" />
       </ListItem>
+      <ListItem button onClick={() => setMenu('unidade')}>
+        <ListItemIcon>
+          <ShoppingCartIcon />
+        </ListItemIcon>
+        <ListItemText primary="Unidades" />
+      </ListItem>
+      <ListItem button onClick={() => setMenu('departamento')}>
+        <ListItemIcon>
+          <ShoppingCartIcon />
+        </ListItemIcon>
+        <ListItemText primary="Departamentos" />
+      </ListItem>
+      <ListItem button onClick={() => setMenu('setor')}>
+        <ListItemIcon>
+          <ShoppingCartIcon />
+        </ListItemIcon>
+        <ListItemText primary="Setores" />
+      </ListItem>
     </div>
   );
 }
