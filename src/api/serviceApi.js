@@ -1,13 +1,14 @@
 import axios from 'axios';
+import {ipBackend} from '../ipBackend'
 
-const apiUnidadesUrl = 'http://127.0.0.1:3001/unidade/';
-const apiDepartamentoUrl = 'http://localhost:3001/departamento/';
-const apiSetorUrl = 'http://127.0.0.1:3001/setor/';
-const apiContratoUrl = 'http://127.0.0.1:3001/contrato/';
-const apiMateriaisUrl = 'http://127.0.0.1:3001/material/';
-const apiEstoqueUrl = 'http://127.0.0.1:3001/estoque/';
-const apiServicoUrl = 'http://127.0.0.1:3001/servico/';
-const apiMatServUrl = 'http://127.0.0.1:3001/matserv/';
+const apiUnidadesUrl = `${ipBackend}/unidade/`;
+const apiDepartamentoUrl = `${ipBackend}/departamento/`;
+const apiSetorUrl = `${ipBackend}/setor/`;
+const apiContratoUrl = `${ipBackend}/contrato/`;
+const apiMateriaisUrl = `${ipBackend}/material/`;
+const apiEstoqueUrl = `${ipBackend}/estoque/`;
+const apiServicoUrl = `${ipBackend}/servico/`;
+const apiMatServUrl = `${ipBackend}/matserv/`;
 
 export async function Unidade() {
   const res = await axios.get(apiUnidadesUrl);
