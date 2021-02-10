@@ -60,13 +60,19 @@ export default function Departamentos({
                 <TableCell>{item.name}</TableCell>
                 <TableCell>{getName(item.unidade)}</TableCell>
                 <TableCell>
-                  <IconButton aria-label="edit" className={classes.margin}>
-                    <EditIcon onClick={() => editItem(item.id_departamento)} />
+                  <IconButton
+                    aria-label="edit"
+                    className={classes.margin}
+                    onClick={() => editItem(item.id_departamento)}
+                  >
+                    <EditIcon />
                   </IconButton>
-                  <IconButton aria-label="delete" className={classes.margin}>
-                    <DeleteIcon
-                      onClick={() => deleteItem(item.id_departamento)}
-                    />
+                  <IconButton
+                    aria-label="delete"
+                    className={classes.margin}
+                    onClick={() => deleteItem(item.id_departamento)}
+                  >
+                    <DeleteIcon />
                   </IconButton>
                 </TableCell>
               </TableRow>

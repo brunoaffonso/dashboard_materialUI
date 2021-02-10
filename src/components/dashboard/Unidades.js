@@ -48,11 +48,19 @@ export default function Unidades({ listItems, onUpdate, editItem }) {
                 <TableCell>{unid.id_unidade}</TableCell>
                 <TableCell>{unid.name}</TableCell>
                 <TableCell>
-                  <IconButton aria-label="edit" className={classes.margin}>
-                    <EditIcon onClick={() => editItem(unid.id_unidade)} />
+                  <IconButton
+                    aria-label="edit"
+                    className={classes.margin}
+                    onClick={() => editItem(unid.id_unidade)}
+                  >
+                    <EditIcon />
                   </IconButton>
-                  <IconButton aria-label="delete" className={classes.margin}>
-                    <DeleteIcon onClick={() => deleteItem(unid.id_unidade)} />
+                  <IconButton
+                    aria-label="delete"
+                    className={classes.margin}
+                    onClick={() => deleteItem(unid.id_unidade)}
+                  >
+                    <DeleteIcon />
                   </IconButton>
                 </TableCell>
               </TableRow>

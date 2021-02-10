@@ -31,8 +31,7 @@ export default function Setores({
   unidades,
 }) {
   const deleteItem = async (id) => {
-    const res = await api.DeleteSetor(id);
-    console.log(res);
+    await api.DeleteSetor(id);
     onUpdate();
   };
 
@@ -70,11 +69,19 @@ export default function Setores({
                 <TableCell>{getDepartamento(item.departamento)}</TableCell>
                 <TableCell>{getUnidade(item.departamento)}</TableCell>
                 <TableCell>
-                  <IconButton aria-label="edit" className={classes.margin}>
-                    <EditIcon onClick={() => editItem(item.id_setor)} />
+                  <IconButton
+                    aria-label="edit"
+                    className={classes.margin}
+                    onClick={() => editItem(item.id_setor)}
+                  >
+                    <EditIcon />
                   </IconButton>
-                  <IconButton aria-label="delete" className={classes.margin}>
-                    <DeleteIcon onClick={() => deleteItem(item.id_setor)} />
+                  <IconButton
+                    aria-label="delete"
+                    className={classes.margin}
+                    onClick={() => deleteItem(item.id_setor)}
+                  >
+                    <DeleteIcon />
                   </IconButton>
                 </TableCell>
               </TableRow>

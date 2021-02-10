@@ -147,7 +147,7 @@ export default function FormMaterial({ onSave, items, setNull }) {
           <Button
             type="submit"
             variant="contained"
-            color="secundary"
+            color="secondary"
             onClick={(e) => handleClearData(e)}
           >
             Limpar

@@ -52,11 +52,19 @@ export default function Materiais({ listItems, onUpdate, editItem }) {
                 <TableCell>{mat.quantidade_ano}</TableCell>
                 <TableCell>{mat.valor}</TableCell>
                 <TableCell>
-                  <IconButton aria-label="edit" className={classes.margin}>
-                    <EditIcon onClick={() => editItem(mat.id_material)} />
+                  <IconButton
+                    aria-label="edit"
+                    className={classes.margin}
+                    onClick={() => editItem(mat.id_material)}
+                  >
+                    <EditIcon />
                   </IconButton>
-                  <IconButton aria-label="delete" className={classes.margin}>
-                    <DeleteIcon onClick={() => deleteItem(mat.id_material)} />
+                  <IconButton
+                    aria-label="delete"
+                    className={classes.margin}
+                    onClick={() => deleteItem(mat.id_material)}
+                  >
+                    <DeleteIcon />
                   </IconButton>
                 </TableCell>
               </TableRow>

@@ -83,7 +83,7 @@ export default function FormUnidade({ onSave, items, setNull }) {
           <Button
             type="submit"
             variant="contained"
-            color="secundary"
+            color="secondary"
             onClick={(e) => handleClearData(e)}
           >
             Limpar

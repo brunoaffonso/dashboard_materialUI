@@ -110,7 +110,7 @@ export default function FormSetor({
           <Button
             type="submit"
             variant="contained"
-            color="secundary"
+            color="secondary"
             onClick={(e) => handleClearData(e)}
           >
             Limpar

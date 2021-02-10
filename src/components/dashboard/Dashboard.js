@@ -31,6 +31,8 @@ import FormDepartamento from './FormDepartamento';
 import Setores from './Setores';
 import FormSetor from './FormSetor';
 import Title from './Title';
+import FormControl from '@material-ui/core/FormControl';
+import Button from '@material-ui/core/Button';
 
 function Copyright() {
   return (
@@ -285,6 +287,20 @@ export default function Dashboard() {
                 <Grid item xs={12} md={8} lg={9}>
                   <Paper className={fixedHeightPaper}>
                     <Chart />
+                  </Paper>
+                </Grid>
+                <Grid item xs={3} md={3} lg={3}>
+                  <Paper className={fixedHeightPaper}>
+                    <FormControl>
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        onClick={(e) => showData(e)}
+                      >
+                        Enviar
+                      </Button>
+                    </FormControl>
                   </Paper>
                 </Grid>
                 <Grid item xs={3}>
