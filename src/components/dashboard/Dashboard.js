@@ -37,15 +37,25 @@ import Button from '@material-ui/core/Button';
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+      {'Todos os direitos reservados © '}
+      <Link color="inherit" href="https://www.fiocruz.br/">
+        Fundação Oswaldo Cruz
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
     </Typography>
   );
 }
+
+const date = new Date();
+
+const day = date.getDate();
+
+const month = date.getMonth();
+
+const year = date.getFullYear();
+
+const today = `${day}/${month}/${year}`;
 
 const drawerWidth = 240;
 
@@ -313,7 +323,7 @@ export default function Dashboard() {
                       color="textSecondary"
                       className={classes.depositContext}
                     >
-                      {Date()}
+                      {today}
                     </Typography>
                     <div>
                       <Link
