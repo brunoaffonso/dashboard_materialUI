@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {ipBackend} from '../ipBackend'
+import { ipBackend } from '../ipBackend';
 
 const apiUnidadesUrl = `${ipBackend}/unidade/`;
 const apiDepartamentoUrl = `${ipBackend}/departamento/`;
@@ -15,7 +15,7 @@ export async function Unidade() {
   return res.data;
 }
 
-export async function insertUnidade(value) {
+export async function InsertUnidade(value) {
   const response = await axios.post(apiUnidadesUrl, value);
   return response.data.id;
 }
@@ -35,7 +35,7 @@ export async function Departamento() {
   return res.data;
 }
 
-export async function insertDepartamento(value) {
+export async function InsertDepartamento(value) {
   const response = await axios.post(apiDepartamentoUrl, value);
   return response.data.id;
 }
@@ -56,7 +56,7 @@ export async function Setor() {
   return res.data;
 }
 
-export async function insertSetor(value) {
+export async function InsertSetor(value) {
   const response = await axios.post(apiSetorUrl, value);
   return response.data.id;
 }
@@ -77,6 +77,21 @@ export async function Contrato() {
   return res.data;
 }
 
+export async function InsertContrato(value) {
+  const response = await axios.post(apiContratoUrl, value);
+  return response.data.id;
+}
+
+export async function EditContrato(id, value) {
+  const response = await axios.post(`${apiContratoUrl}${id}`, value);
+  return response.data;
+}
+
+export async function DeleteContrato(id) {
+  const response = await axios.delete(`${apiContratoUrl}${id}`);
+  return response.data;
+}
+
 export async function Materiais() {
   const res = await axios.get(apiMateriaisUrl);
   return res.data;
@@ -87,13 +102,13 @@ export async function InsertMaterial(value) {
   return response.data;
 }
 
-export async function DeleteMaterial(id) {
-  const response = await axios.delete(`${apiMateriaisUrl}${id}`);
+export async function EditMaterial(id, value) {
+  const response = await axios.post(`${apiMateriaisUrl}${id}`, value);
   return response.data;
 }
 
-export async function EditMaterial(id, value) {
-  const response = await axios.post(`${apiMateriaisUrl}${id}`, value);
+export async function DeleteMaterial(id) {
+  const response = await axios.delete(`${apiMateriaisUrl}${id}`);
   return response.data;
 }
 
@@ -101,6 +116,21 @@ export async function Estoque() {
   const res = await axios.get(apiEstoqueUrl);
   // console.log(res.data);
   return res.data;
+}
+
+export async function InsertEstoque(value) {
+  const response = await axios.post(apiEstoqueUrl, value);
+  return response.data.id;
+}
+
+export async function EditEstoque(id, value) {
+  const response = await axios.post(`${apiEstoqueUrl}${id}`, value);
+  return response.data;
+}
+
+export async function DeleteEstoque(id) {
+  const response = await axios.delete(`${apiEstoqueUrl}${id}`);
+  return response.data;
 }
 
 export async function Servico() {

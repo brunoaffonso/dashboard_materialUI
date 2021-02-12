@@ -59,7 +59,7 @@ export default function FormDepartamentos({
     if (id) {
       await api.EditDepartamento(id, data);
     } else {
-      await api.insertDepartamento(data);
+      await api.InsertDepartamento(data);
     }
     onSave();
     clearData();

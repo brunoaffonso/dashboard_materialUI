@@ -33,6 +33,10 @@ import FormSetor from './FormSetor';
 import Title from './Title';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
+import Contratos from './Contratos';
+import FormContrato from './FormContrato';
+import Estoques from './Estoques';
+import FormEstoque from './FormEstoque';
 
 function Copyright() {
   return (
@@ -48,13 +52,9 @@ function Copyright() {
 }
 
 const date = new Date();
-
 const day = date.getDate();
-
 const month = date.getMonth();
-
 const year = date.getFullYear();
-
 const today = `${day}/${month}/${year}`;
 
 const drawerWidth = 240;
@@ -148,6 +148,10 @@ export default function Dashboard() {
   const [selectedDepartamento, setSelectedDepartamento] = useState(null);
   const [setor, setSetor] = useState([]);
   const [selectedSetor, setSelectedSetor] = useState(null);
+  const [contrato, setContrato] = useState([]);
+  const [selectedContrato, setSelectedContrato] = useState(null);
+  const [estoque, setEstoque] = useState([]);
+  const [selectedEstoque, setSelectedEstoque] = useState(null);
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
 
@@ -180,11 +184,23 @@ export default function Dashboard() {
     setSetor(setores);
   };
 
+  const getContratos = async () => {
+    const contratos = await api.Contrato();
+    setContrato(contratos);
+  };
+
+  const getEstoques = async () => {
+    const estoques = await api.Estoque();
+    setEstoque(estoques);
+  };
+
   const showData = () => {
     console.log(unidade);
     console.log(material);
     console.log(departamento);
     console.log(setor);
+    console.log(contrato);
+    console.log(estoque);
   };
 
   const setNull = () => {
@@ -192,6 +208,8 @@ export default function Dashboard() {
     setSelectedUnidade(null);
     setSelectedDepartamento(null);
     setSelectedSetor(null);
+    setSelectedContrato(null);
+    setSelectedEstoque(null);
   };
 
   const editMaterial = (mat) => {
@@ -216,8 +234,22 @@ export default function Dashboard() {
   };
 
   const editSetor = (set) => {
-    const [res] = setor.filter((d) => parseInt(d.id_setor) === parseInt(set));
+    const [res] = setor.filter((s) => parseInt(s.id_setor) === parseInt(set));
     setSelectedSetor(res);
+  };
+
+  const editContrato = (cont) => {
+    const [res] = contrato.filter(
+      (c) => parseInt(c.id_contrato) === parseInt(cont)
+    );
+    setSelectedContrato(res);
+  };
+
+  const editEstoque = (est) => {
+    const [res] = estoque.filter(
+      (e) => parseInt(e.id_estoque) === parseInt(est)
+    );
+    setSelectedEstoque(res);
   };
 
   const setItem = (item) => {
@@ -229,6 +261,8 @@ export default function Dashboard() {
     getUnidades();
     getDepartamentos();
     getSetores();
+    getContratos();
+    getEstoques();
   }, []);
 
   return (
@@ -405,6 +439,52 @@ export default function Dashboard() {
                     </div>
                   </Paper>
                 </Grid>
+                <Grid item xs={3}>
+                  <Paper className={classes.paper}>
+                    <Title>Contratos Cadastrados</Title>
+                    <Typography component="p" variant="h4">
+                      {contrato.length}
+                    </Typography>
+                    <Typography
+                      color="textSecondary"
+                      className={classes.depositContext}
+                    >
+                      {Date()}
+                    </Typography>
+                    <div>
+                      <Link
+                        color="primary"
+                        href="#"
+                        onClick={() => setMenu('contrato')}
+                      >
+                        Detalhes
+                      </Link>
+                    </div>
+                  </Paper>
+                </Grid>
+                <Grid item xs={3}>
+                  <Paper className={classes.paper}>
+                    <Title>Materiais em Estoque</Title>
+                    <Typography component="p" variant="h4">
+                      {estoque.length}
+                    </Typography>
+                    <Typography
+                      color="textSecondary"
+                      className={classes.depositContext}
+                    >
+                      {Date()}
+                    </Typography>
+                    <div>
+                      <Link
+                        color="primary"
+                        href="#"
+                        onClick={() => setMenu('estoque')}
+                      >
+                        Detalhes
+                      </Link>
+                    </div>
+                  </Paper>
+                </Grid>
               </>
             )}
             {menu === 'material' && (
@@ -496,6 +576,50 @@ export default function Dashboard() {
                       departamentos={departamento}
                       items={selectedSetor}
                       setNull={setNull}
+                    />
+                  </Paper>
+                </Grid>
+              </>
+            )}
+            {menu === 'contrato' && (
+              <>
+                <Grid item xs={12}>
+                  <Paper className={classes.paper}>
+                    <FormContrato
+                      onSave={getContratos}
+                      items={selectedContrato}
+                      setNull={setNull}
+                    />
+                  </Paper>
+                </Grid>
+                <Grid item xs={12}>
+                  <Paper className={classes.paper}>
+                    <Contratos
+                      listItems={contrato}
+                      onUpdate={getContratos}
+                      editItem={editContrato}
+                    />
+                  </Paper>
+                </Grid>
+              </>
+            )}
+            {menu === 'estoque' && (
+              <>
+                <Grid item xs={12}>
+                  <Paper className={classes.paper}>
+                    <FormEstoque
+                      onSave={getEstoques}
+                      items={selectedEstoque}
+                      setNull={setNull}
+                    />
+                  </Paper>
+                </Grid>
+                <Grid item xs={12}>
+                  <Paper className={classes.paper}>
+                    <Estoques
+                      listItems={estoque}
+                      onUpdate={getEstoques}
+                      editItem={editEstoque}
                     />
                   </Paper>
                 </Grid>

@@ -66,7 +66,7 @@ export default function FormSetor({
     if (id) {
       await api.EditSetor(id, data);
     } else {
-      await api.insertSetor(data);
+      await api.InsertSetor(data);
     }
     onSave();
     clearData();

@@ -53,7 +53,7 @@ export default function FormUnidade({ onSave, items, setNull }) {
     if (id) {
       await api.EditUnidade(id, data);
     } else {
-      await api.insertUnidade(data);
+      await api.InsertUnidade(data);
     }
     onSave();
     clearData();
