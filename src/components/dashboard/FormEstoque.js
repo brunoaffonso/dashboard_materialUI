@@ -5,6 +5,8 @@ import Button from '@material-ui/core/Button';
 // import MenuItem from '@material-ui/core/MenuItem';
 import * as api from '../../api/serviceApi';
 import { makeStyles } from '@material-ui/core/styles';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,10 +26,12 @@ export default function FormEstoque({ onSave, items, setNull }) {
   const [numeroSerie, setNumeroSerie] = useState('');
   const [desenho, setDesenho] = useState('');
   const [dataEntrada, setDataEntrada] = useState('');
+  const [dataSaida, setDataSaida] = useState('');
   const [localizacao, setLocalizacao] = useState('');
   const [responsavelRetirada, setResponsavelRetirada] = useState('');
   const [info, setInfo] = useState('');
   const [emEstoque, setEmEstoque] = useState('');
+  const [booleanEmestoque, setBooleanEmEstoque] = useState(false);
 
   const setData = (data) => {
     setId(data.id_estoque);
@@ -37,6 +41,7 @@ export default function FormEstoque({ onSave, items, setNull }) {
     setNumeroSerie(data.numero_serie);
     setDesenho(data.desenho);
     setDataEntrada(data.data_entrada);
+    setDataSaida(data.data_saida);
     setLocalizacao(data.localizacao);
     setResponsavelRetirada(data.responsavel_retirada);
     setInfo(data.info);
@@ -47,6 +52,27 @@ export default function FormEstoque({ onSave, items, setNull }) {
   //   setData(material);
   // }
 
+  const changeEmEstoque = () => {
+    console.log('change');
+    if (emEstoque === 0) {
+      setBooleanEmEstoque(true);
+      setEmEstoque(1);
+      return false;
+    } else {
+      setBooleanEmEstoque(false);
+      setEmEstoque(0);
+      return true;
+    }
+  };
+
+  const loadEmEstoque = () => {
+    if (emEstoque === 0) {
+      setBooleanEmEstoque(false);
+    } else {
+      setBooleanEmEstoque(true);
+    }
+  };
+
   const clearData = () => {
     setId(null);
     setMaterial('');
@@ -55,6 +81,7 @@ export default function FormEstoque({ onSave, items, setNull }) {
     setNumeroSerie('');
     setDesenho('');
     setDataEntrada('');
+    setDataSaida('');
     setLocalizacao('');
     setResponsavelRetirada('');
     setInfo('');
@@ -63,6 +90,7 @@ export default function FormEstoque({ onSave, items, setNull }) {
   };
 
   useEffect(() => {
+    loadEmEstoque();
     if (items) {
       setData(items);
     }
@@ -82,6 +110,7 @@ export default function FormEstoque({ onSave, items, setNull }) {
       numero_serie: numeroSerie,
       desenho: desenho,
       data_entrada: dataEntrada,
+      data_saida: dataSaida,
       localizacao: localizacao,
       responsavel_retirada: responsavelRetirada,
       info: info,
@@ -137,8 +166,23 @@ export default function FormEstoque({ onSave, items, setNull }) {
         <FormControl>
           <TextField
             label="Data de Entrada"
+            type="date"
             value={dataEntrada}
             onChange={(e) => setDataEntrada(e.target.value)}
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+        </FormControl>
+        <FormControl>
+          <TextField
+            label="Data de Saída"
+            type="date"
+            value={dataEntrada}
+            onChange={(e) => setDataEntrada(e.target.value)}
+            InputLabelProps={{
+              shrink: true,
+            }}
           />
         </FormControl>
         <FormControl>
@@ -162,13 +206,24 @@ export default function FormEstoque({ onSave, items, setNull }) {
             onChange={(e) => setInfo(e.target.value)}
           />
         </FormControl>
-        <FormControl>
+        <FormControlLabel
+          label="Em estoque?"
+          control={
+            <Checkbox
+              checked={booleanEmestoque}
+              onChange={changeEmEstoque}
+              name="checkedB"
+              color="primary"
+            />
+          }
+        />
+        {/* <FormControl>
           <TextField
             label="Em estoque?"
             value={emEstoque}
             onChange={(e) => setEmEstoque(e.target.value)}
           />
-        </FormControl>
+        </FormControl> */}
         {/* <FormControl>
           <TextField
             select
