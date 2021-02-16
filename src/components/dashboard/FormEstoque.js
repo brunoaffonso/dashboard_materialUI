@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
-// import MenuItem from '@material-ui/core/MenuItem';
 import * as api from '../../api/serviceApi';
 import { makeStyles } from '@material-ui/core/styles';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import { dateFormat } from '../../helpers/formaters';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,8 +30,8 @@ export default function FormEstoque({ onSave, items, setNull }) {
   const [localizacao, setLocalizacao] = useState('');
   const [responsavelRetirada, setResponsavelRetirada] = useState('');
   const [info, setInfo] = useState('');
-  const [emEstoque, setEmEstoque] = useState('');
-  const [booleanEmestoque, setBooleanEmEstoque] = useState(false);
+  const [emEstoque, setEmEstoque] = useState(0);
+  // const [booleanEmestoque, setBooleanEmEstoque] = useState(false);
 
   const setData = (data) => {
     setId(data.id_estoque);
@@ -52,27 +52,6 @@ export default function FormEstoque({ onSave, items, setNull }) {
   //   setData(material);
   // }
 
-  const changeEmEstoque = () => {
-    console.log('change');
-    if (emEstoque === 0) {
-      setBooleanEmEstoque(true);
-      setEmEstoque(1);
-      return false;
-    } else {
-      setBooleanEmEstoque(false);
-      setEmEstoque(0);
-      return true;
-    }
-  };
-
-  const loadEmEstoque = () => {
-    if (emEstoque === 0) {
-      setBooleanEmEstoque(false);
-    } else {
-      setBooleanEmEstoque(true);
-    }
-  };
-
   const clearData = () => {
     setId(null);
     setMaterial('');
@@ -85,12 +64,11 @@ export default function FormEstoque({ onSave, items, setNull }) {
     setLocalizacao('');
     setResponsavelRetirada('');
     setInfo('');
-    setEmEstoque('');
+    setEmEstoque(0);
     setNull();
   };
 
   useEffect(() => {
-    loadEmEstoque();
     if (items) {
       setData(items);
     }
@@ -124,6 +102,11 @@ export default function FormEstoque({ onSave, items, setNull }) {
     onSave();
     clearData();
   };
+
+  const date = (value) => {
+    return new Date(value).toUTCString();
+  };
+
   return (
     <div>
       <h2>Adicionar Estoque {id && <span>({id})</span>}</h2>
@@ -167,8 +150,12 @@ export default function FormEstoque({ onSave, items, setNull }) {
           <TextField
             label="Data de Entrada"
             type="date"
-            value={dataEntrada}
-            onChange={(e) => setDataEntrada(e.target.value)}
+            value={
+              dataEntrada === '' || dataEntrada === null
+                ? ''
+                : dateFormat(dataEntrada)
+            }
+            onChange={(e) => setDataEntrada(date(e.target.value))}
             InputLabelProps={{
               shrink: true,
             }}
@@ -178,8 +165,12 @@ export default function FormEstoque({ onSave, items, setNull }) {
           <TextField
             label="Data de Saída"
             type="date"
-            value={dataEntrada}
-            onChange={(e) => setDataEntrada(e.target.value)}
+            value={
+              dataSaida === '' || dataSaida === null
+                ? ''
+                : dateFormat(dataSaida)
+            }
+            onChange={(e) => setDataSaida(e.target.value)}
             InputLabelProps={{
               shrink: true,
             }}
@@ -210,8 +201,10 @@ export default function FormEstoque({ onSave, items, setNull }) {
           label="Em estoque?"
           control={
             <Checkbox
-              checked={booleanEmestoque}
-              onChange={changeEmEstoque}
+              checked={emEstoque === 0 ? false : true}
+              onChange={() =>
+                emEstoque === 0 ? setEmEstoque(1) : setEmEstoque(0)
+              }
               name="checkedB"
               color="primary"
             />

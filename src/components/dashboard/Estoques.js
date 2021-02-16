@@ -12,6 +12,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import * as api from '../../api/serviceApi';
 import TableContainer from '@material-ui/core/TableContainer';
 import Paper from '@material-ui/core/Paper';
+import { dateFormatList } from '../../helpers/formaters';
 
 // function preventDefault(event) {
 //   event.preventDefault();
@@ -41,6 +42,7 @@ export default function Estoques({ listItems, onUpdate, editItem }) {
               <TableCell>Fabricante</TableCell>
               <TableCell>Modelo</TableCell>
               <TableCell>Data de Entrada</TableCell>
+              <TableCell>Data de Saída</TableCell>
               <TableCell>Local</TableCell>
               <TableCell>Em estoque</TableCell>
               <TableCell> </TableCell>
@@ -52,7 +54,10 @@ export default function Estoques({ listItems, onUpdate, editItem }) {
                 <TableCell>{mat.material}</TableCell>
                 <TableCell>{mat.fabricante}</TableCell>
                 <TableCell>{mat.modelo}</TableCell>
-                <TableCell>{mat.data_entrada}</TableCell>
+                <TableCell>{dateFormatList(mat.data_entrada)}</TableCell>
+                <TableCell>
+                  {mat.data_saida ? dateFormatList(mat.data_saida) : ''}
+                </TableCell>
                 <TableCell>{mat.localizacao}</TableCell>
                 <TableCell>{mat.em_estoque}</TableCell>
                 <TableCell>

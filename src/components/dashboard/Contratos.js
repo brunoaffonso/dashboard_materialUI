@@ -12,6 +12,11 @@ import EditIcon from '@material-ui/icons/Edit';
 import * as api from '../../api/serviceApi';
 import TableContainer from '@material-ui/core/TableContainer';
 import Paper from '@material-ui/core/Paper';
+import {
+  dateFormatList,
+  dateFormat,
+  formatNumber,
+} from '../../helpers/formaters';
 
 // function preventDefault(event) {
 //   event.preventDefault();
@@ -54,9 +59,9 @@ export default function Contratos({ listItems, onUpdate, editItem }) {
                 </TableCell>
                 <TableCell>{mat.descricao}</TableCell>
                 <TableCell>{mat.renovacao}</TableCell>
-                <TableCell>{mat.inicio}</TableCell>
-                <TableCell>{mat.fim}</TableCell>
-                <TableCell>{mat.bdi}</TableCell>
+                <TableCell>{dateFormatList(mat.inicio)}</TableCell>
+                <TableCell>{dateFormatList(mat.fim)}</TableCell>
+                <TableCell>{formatNumber(mat.bdi)} %</TableCell>
                 <TableCell>
                   <IconButton
                     aria-label="edit"

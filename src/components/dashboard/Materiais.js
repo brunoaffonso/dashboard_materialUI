@@ -12,6 +12,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import * as api from '../../api/serviceApi';
 import TableContainer from '@material-ui/core/TableContainer';
 import Paper from '@material-ui/core/Paper';
+import { formatNumber } from '../../helpers/formaters';
 
 // function preventDefault(event) {
 //   event.preventDefault();
@@ -50,7 +51,7 @@ export default function Materiais({ listItems, onUpdate, editItem }) {
                 <TableCell>{mat.numero_item}</TableCell>
                 <TableCell>{mat.descricao}</TableCell>
                 <TableCell>{mat.quantidade_ano}</TableCell>
-                <TableCell>{mat.valor}</TableCell>
+                <TableCell>R$ {formatNumber(mat.valor)}</TableCell>
                 <TableCell>
                   <IconButton
                     aria-label="edit"
