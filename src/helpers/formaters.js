@@ -9,12 +9,13 @@ const yearOptions = { year: 'numeric' };
 
 export function dateFormat(value) {
   const date = new Date(value);
+  if (date.getUTCHours() === 0) {
+    date.setUTCHours(date.getUTCHours() + 3);
+  }
   // date.setDate(date.getDate() + 1);
   const day = new Intl.DateTimeFormat('pt-BR', dayOptions).format(date);
   const month = new Intl.DateTimeFormat('pt-BR', monthOptions).format(date);
   const year = new Intl.DateTimeFormat('pt-BR', yearOptions).format(date);
-
-  console.log(value);
 
   return `${year}-${month}-${day}`;
 }

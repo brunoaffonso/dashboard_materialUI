@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
 import * as api from '../../api/serviceApi';
 import { makeStyles } from '@material-ui/core/styles';
+import { dateFormat } from '../../helpers/formaters';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -83,6 +84,11 @@ export default function FormContrato({ onSave, items, setNull }) {
     onSave();
     clearData();
   };
+
+  const date = (value) => {
+    return new Date(value).toISOString();
+  };
+
   return (
     <div>
       <h2>Adicionar Contrato {id && <span>({id})</span>}</h2>
@@ -128,15 +134,33 @@ export default function FormContrato({ onSave, items, setNull }) {
         <FormControl>
           <TextField
             label="Inicio"
-            value={inicio}
-            onChange={(e) => setInicio(e.target.value)}
+            type="date"
+            value={inicio === '' || inicio === null ? '' : dateFormat(inicio)}
+            onChange={(e) =>
+              e.target.value === ''
+                ? setInicio(null)
+                : setInicio(date(e.target.value))
+            }
+            InputLabelProps={{
+              shrink: true,
+            }}
+            required
           />
         </FormControl>
         <FormControl>
           <TextField
             label="Fim"
-            value={fim}
-            onChange={(e) => setFim(e.target.value)}
+            type="date"
+            value={fim === '' || fim === null ? '' : dateFormat(fim)}
+            onChange={(e) =>
+              e.target.value === ''
+                ? setFim(null)
+                : setFim(date(e.target.value))
+            }
+            InputLabelProps={{
+              shrink: true,
+            }}
+            required
           />
         </FormControl>
         <FormControl>

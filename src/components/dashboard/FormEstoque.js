@@ -104,7 +104,7 @@ export default function FormEstoque({ onSave, items, setNull }) {
   };
 
   const date = (value) => {
-    return new Date(value).toUTCString();
+    return new Date(value).toISOString();
   };
 
   return (
@@ -123,6 +123,7 @@ export default function FormEstoque({ onSave, items, setNull }) {
             label="Fabricante"
             value={fabricante}
             onChange={(e) => setFabricante(e.target.value)}
+            required
           />
         </FormControl>
         <FormControl>
@@ -155,10 +156,15 @@ export default function FormEstoque({ onSave, items, setNull }) {
                 ? ''
                 : dateFormat(dataEntrada)
             }
-            onChange={(e) => setDataEntrada(date(e.target.value))}
+            onChange={(e) =>
+              e.target.value === ''
+                ? setDataEntrada(null)
+                : setDataEntrada(date(e.target.value))
+            }
             InputLabelProps={{
               shrink: true,
             }}
+            required
           />
         </FormControl>
         <FormControl>
@@ -170,7 +176,11 @@ export default function FormEstoque({ onSave, items, setNull }) {
                 ? ''
                 : dateFormat(dataSaida)
             }
-            onChange={(e) => setDataSaida(e.target.value)}
+            onChange={(e) =>
+              e.target.value === ''
+                ? setDataSaida(null)
+                : setDataSaida(date(e.target.value))
+            }
             InputLabelProps={{
               shrink: true,
             }}

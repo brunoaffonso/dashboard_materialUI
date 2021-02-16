@@ -52,28 +52,32 @@ export default function Contratos({ listItems, onUpdate, editItem }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {listItems.map((mat) => (
-              <TableRow key={mat.id_contrato}>
+            {listItems.map((cont) => (
+              <TableRow key={cont.id_contrato}>
                 <TableCell>
-                  {mat.numero}/{mat.ano}
+                  {cont.numero}/{cont.ano}
                 </TableCell>
-                <TableCell>{mat.descricao}</TableCell>
-                <TableCell>{mat.renovacao}</TableCell>
-                <TableCell>{dateFormatList(mat.inicio)}</TableCell>
-                <TableCell>{dateFormatList(mat.fim)}</TableCell>
-                <TableCell>{formatNumber(mat.bdi)} %</TableCell>
+                <TableCell>{cont.descricao}</TableCell>
+                <TableCell>{cont.renovacao}</TableCell>
+                <TableCell>
+                  {cont.inicio ? dateFormatList(cont.inicio) : ''}
+                </TableCell>
+                <TableCell>
+                  {cont.fim ? dateFormatList(cont.fim) : ''}
+                </TableCell>
+                <TableCell>{formatNumber(cont.bdi)} %</TableCell>
                 <TableCell>
                   <IconButton
                     aria-label="edit"
                     className={classes.margin}
-                    onClick={() => editItem(mat.id_contrato)}
+                    onClick={() => editItem(cont.id_contrato)}
                   >
                     <EditIcon />
                   </IconButton>
                   <IconButton
                     aria-label="delete"
                     className={classes.margin}
-                    onClick={() => deleteItem(mat.id_contrato)}
+                    onClick={() => deleteItem(cont.id_contrato)}
                   >
                     <DeleteIcon />
                   </IconButton>
