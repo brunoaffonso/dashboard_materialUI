@@ -44,6 +44,12 @@ export default function MainListItems({ setMenu }) {
         </ListItemIcon>
         <ListItemText primary="Contratos" />
       </ListItem>
+      <ListItem button onClick={() => setMenu('vigencia')}>
+        <ListItemIcon>
+          <ShoppingCartIcon />
+        </ListItemIcon>
+        <ListItemText primary="Vigências" />
+      </ListItem>
       <ListItem button onClick={() => setMenu('estoque')}>
         <ListItemIcon>
           <ShoppingCartIcon />

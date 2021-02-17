@@ -7,6 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import { dateFormat } from '../../helpers/formaters';
+import MenuItem from '@material-ui/core/MenuItem';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function FormEstoque({ onSave, items, setNull }) {
+export default function FormEstoque({ onSave, items, setNull, materiaisList }) {
   const classes = useStyles();
   const [id, setId] = useState(null);
   const [material, setMaterial] = useState('');
@@ -113,10 +114,17 @@ export default function FormEstoque({ onSave, items, setNull }) {
       <form className={classes.root} noValidate autoComplete="off">
         <FormControl>
           <TextField
+            select
             label="Material"
-            value={material}
+            value={material ? material : ''}
             onChange={(e) => setMaterial(e.target.value)}
-          />
+          >
+            {materiaisList.map((m) => (
+              <MenuItem key={m.id_material} value={m.id_material}>
+                {m.id_material} - {m.descricao}
+              </MenuItem>
+            ))}
+          </TextField>
         </FormControl>
         <FormControl>
           <TextField
@@ -226,21 +234,6 @@ export default function FormEstoque({ onSave, items, setNull }) {
             value={emEstoque}
             onChange={(e) => setEmEstoque(e.target.value)}
           />
-        </FormControl> */}
-        {/* <FormControl>
-          <TextField
-            select
-            label="Número de Série"
-            value={numeroSerie}
-            onChange={(e) => setNumeroSerie(e.target.value)}
-          >
-            <MenuItem key={'u'} value={'u'}>
-              Unidade
-            </MenuItem>
-            <MenuItem key={'m'} value={'m'}>
-              Metro
-            </MenuItem>
-          </TextField>
         </FormControl> */}
         <FormControl>
           <Button

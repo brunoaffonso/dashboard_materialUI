@@ -24,48 +24,54 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Contratos({ listItems, onUpdate, editItem }) {
+export default function Vigencias({ listItems, onUpdate, editItem }) {
   const deleteItem = async (id) => {
-    await api.DeleteContrato(id);
+    await api.DeleteVigencia(id);
     onUpdate();
   };
 
   const classes = useStyles();
   return (
     <React.Fragment>
-      <Title>Contratos</Title>
+      <Title>Vigências de Contratos</Title>
       <TableContainer component={Paper}>
         <Table className={classes.table} size="small">
           <TableHead>
             <TableRow>
-              <TableCell>N. Contrato</TableCell>
-              <TableCell>Processo</TableCell>
+              <TableCell>N. Contrato / Ano</TableCell>
               <TableCell>Descrição</TableCell>
+              <TableCell>Renovação</TableCell>
               <TableCell>Início</TableCell>
+              <TableCell>Fim</TableCell>
+              <TableCell>BDI</TableCell>
               <TableCell> </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {listItems.map((cont) => (
-              <TableRow key={cont.id_contrato}>
-                <TableCell>{cont.numero}</TableCell>
-                <TableCell>{cont.processo}</TableCell>
+              <TableRow key={cont.id_vigencia}>
+                <TableCell>{cont.contrato}</TableCell>
                 <TableCell>{cont.descricao}</TableCell>
+                <TableCell>{cont.renovacao}</TableCell>
                 <TableCell>
                   {cont.inicio ? dateFormatList(cont.inicio) : ''}
                 </TableCell>
                 <TableCell>
+                  {cont.fim ? dateFormatList(cont.fim) : ''}
+                </TableCell>
+                <TableCell>{formatNumber(cont.bdi)} %</TableCell>
+                <TableCell>
                   <IconButton
                     aria-label="edit"
                     className={classes.margin}
-                    onClick={() => editItem(cont.id_contrato)}
+                    onClick={() => editItem(cont.id_vigencia)}
                   >
                     <EditIcon />
                   </IconButton>
                   <IconButton
                     aria-label="delete"
                     className={classes.margin}
-                    onClick={() => deleteItem(cont.id_contrato)}
+                    onClick={() => deleteItem(cont.id_vigencia)}
                   >
                     <DeleteIcon />
                   </IconButton>

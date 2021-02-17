@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
+import MenuItem from '@material-ui/core/MenuItem';
 import * as api from '../../api/serviceApi';
 import { makeStyles } from '@material-ui/core/styles';
 import { dateFormat } from '../../helpers/formaters';
@@ -15,19 +16,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function FormContrato({ onSave, items, setNull }) {
+export default function FormVigencia({ onSave, items, setNull, contratos }) {
   const classes = useStyles();
   const [id, setId] = useState(null);
-  const [numero, setNumero] = useState('');
+  const [contrato, setContrato] = useState('');
+  const [renovacao, setRenovacao] = useState('');
   const [inicio, setInicio] = useState('');
-  const [processo, setProcesso] = useState('');
+  const [fim, setFim] = useState('');
+  const [bdi, setBdi] = useState('');
   const [descricao, setDescricao] = useState('');
 
   const setData = (data) => {
-    setId(data.id_contrato);
-    setNumero(data.numero);
+    setId(data.id_vigencia);
+    setContrato(data.contrato);
+    setRenovacao(data.renovacao);
     setInicio(data.inicio);
-    setProcesso(data.processo);
+    setFim(data.fim);
+    setBdi(data.bdi);
     setDescricao(data.descricao);
   };
 
@@ -37,9 +42,11 @@ export default function FormContrato({ onSave, items, setNull }) {
 
   const clearData = () => {
     setId(null);
-    setNumero('');
+    setContrato('');
+    setRenovacao('');
     setInicio('');
-    setProcesso('');
+    setFim('');
+    setBdi('');
     setDescricao('');
     setNull();
   };
@@ -58,15 +65,17 @@ export default function FormContrato({ onSave, items, setNull }) {
   const handleButton = async (event) => {
     event.preventDefault();
     const data = {
-      numero: numero,
+      contrato: contrato,
+      renovacao: renovacao,
       inicio: inicio,
-      processo: processo,
+      fim: fim,
+      bdi: bdi,
       descricao: descricao,
     };
     if (id) {
-      await api.EditContrato(id, data);
+      await api.EditVigencia(id, data);
     } else {
-      await api.InsertContrato(data);
+      await api.InsertVigencia(data);
     }
     onSave();
     clearData();
@@ -78,14 +87,45 @@ export default function FormContrato({ onSave, items, setNull }) {
 
   return (
     <div>
-      <h2>Adicionar Contrato {id && <span>({id})</span>}</h2>
+      <h2>Adicionar Vigencia {id && <span>({id})</span>}</h2>
       <form className={classes.root} noValidate autoComplete="off">
         <FormControl>
           <TextField
-            label="Número do Contrato"
-            value={numero}
-            onChange={(e) => setNumero(e.target.value)}
-          />
+            select
+            label="Contrato"
+            value={contrato ? contrato : ''}
+            onChange={(e) => setContrato(e.target.value)}
+          >
+            {contratos.map((c) => (
+              <MenuItem key={c.id_contrato} value={c.id_contrato}>
+                {c.numero} - {c.descricao}
+              </MenuItem>
+            ))}
+          </TextField>
+        </FormControl>
+        <FormControl>
+          <TextField
+            select
+            label="Renovação"
+            value={renovacao}
+            onChange={(e) => setRenovacao(e.target.value)}
+          >
+            <MenuItem key={'1'} value={'1'}>
+              Primeiro ano
+            </MenuItem>
+            <MenuItem key={'2'} value={'2'}>
+              1 Renovação
+            </MenuItem>
+            <MenuItem key={'3'} value={'3'}>
+              2 Renovação
+            </MenuItem>
+            <MenuItem key={'4'} value={'4'}>
+              3 Renovação
+            </MenuItem>
+            <MenuItem key={'5'} value={'5'}>
+              4 Renovação
+            </MenuItem>
+          </TextField>
         </FormControl>
         <FormControl>
           <TextField
@@ -105,9 +145,25 @@ export default function FormContrato({ onSave, items, setNull }) {
         </FormControl>
         <FormControl>
           <TextField
-            label="Processo"
-            value={processo}
-            onChange={(e) => setProcesso(e.target.value)}
+            label="Fim"
+            type="date"
+            value={fim === '' || fim === null ? '' : dateFormat(fim)}
+            onChange={(e) =>
+              e.target.value === ''
+                ? setFim(null)
+                : setFim(date(e.target.value))
+            }
+            InputLabelProps={{
+              shrink: true,
+            }}
+            required
+          />
+        </FormControl>
+        <FormControl>
+          <TextField
+            label="BDI"
+            value={bdi}
+            onChange={(e) => setBdi(e.target.value)}
           />
         </FormControl>
         <FormControl>

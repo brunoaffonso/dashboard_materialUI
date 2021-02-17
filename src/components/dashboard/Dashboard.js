@@ -35,6 +35,8 @@ import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 import Contratos from './Contratos';
 import FormContrato from './FormContrato';
+import Vigencias from './Vigencias';
+import FormVigencia from './FormVigencia';
 import Estoques from './Estoques';
 import FormEstoque from './FormEstoque';
 
@@ -150,6 +152,8 @@ export default function Dashboard() {
   const [selectedSetor, setSelectedSetor] = useState(null);
   const [contrato, setContrato] = useState([]);
   const [selectedContrato, setSelectedContrato] = useState(null);
+  const [vigencia, setVigencia] = useState([]);
+  const [selectedVigencia, setSelectedVigencia] = useState(null);
   const [estoque, setEstoque] = useState([]);
   const [selectedEstoque, setSelectedEstoque] = useState(null);
   const classes = useStyles();
@@ -189,6 +193,11 @@ export default function Dashboard() {
     setContrato(contratos);
   };
 
+  const getVigencias = async () => {
+    const vigencias = await api.Vigencia();
+    setVigencia(vigencias);
+  };
+
   const getEstoques = async () => {
     const estoques = await api.Estoque();
     setEstoque(estoques);
@@ -200,6 +209,7 @@ export default function Dashboard() {
     console.log(departamento);
     console.log(setor);
     console.log(contrato);
+    console.log(vigencia);
     console.log(estoque);
   };
 
@@ -209,6 +219,7 @@ export default function Dashboard() {
     setSelectedDepartamento(null);
     setSelectedSetor(null);
     setSelectedContrato(null);
+    setSelectedVigencia(null);
     setSelectedEstoque(null);
   };
 
@@ -245,6 +256,13 @@ export default function Dashboard() {
     setSelectedContrato(res);
   };
 
+  const editVigencia = (vig) => {
+    const [res] = vigencia.filter(
+      (v) => parseInt(v.id_vigencia) === parseInt(vig)
+    );
+    setSelectedVigencia(res);
+  };
+
   const editEstoque = (est) => {
     const [res] = estoque.filter(
       (e) => parseInt(e.id_estoque) === parseInt(est)
@@ -262,6 +280,7 @@ export default function Dashboard() {
     getDepartamentos();
     getSetores();
     getContratos();
+    getVigencias();
     getEstoques();
   }, []);
 
@@ -464,6 +483,29 @@ export default function Dashboard() {
                 </Grid>
                 <Grid item xs={3}>
                   <Paper className={classes.paper}>
+                    <Title>Vigências</Title>
+                    <Typography component="p" variant="h4">
+                      {vigencia.length}
+                    </Typography>
+                    <Typography
+                      color="textSecondary"
+                      className={classes.depositContext}
+                    >
+                      {Date()}
+                    </Typography>
+                    <div>
+                      <Link
+                        color="primary"
+                        href="#"
+                        onClick={() => setMenu('vigencia')}
+                      >
+                        Detalhes
+                      </Link>
+                    </div>
+                  </Paper>
+                </Grid>
+                <Grid item xs={3}>
+                  <Paper className={classes.paper}>
                     <Title>Materiais em Estoque</Title>
                     <Typography component="p" variant="h4">
                       {estoque.length}
@@ -603,6 +645,29 @@ export default function Dashboard() {
                 </Grid>
               </>
             )}
+            {menu === 'vigencia' && (
+              <>
+                <Grid item xs={12}>
+                  <Paper className={classes.paper}>
+                    <FormVigencia
+                      onSave={getVigencias}
+                      items={selectedVigencia}
+                      setNull={setNull}
+                      contratos={contrato}
+                    />
+                  </Paper>
+                </Grid>
+                <Grid item xs={12}>
+                  <Paper className={classes.paper}>
+                    <Vigencias
+                      listItems={vigencia}
+                      onUpdate={getVigencias}
+                      editItem={editVigencia}
+                    />
+                  </Paper>
+                </Grid>
+              </>
+            )}
             {menu === 'estoque' && (
               <>
                 <Grid item xs={12}>
@@ -611,6 +676,7 @@ export default function Dashboard() {
                       onSave={getEstoques}
                       items={selectedEstoque}
                       setNull={setNull}
+                      materiaisList={material}
                     />
                   </Paper>
                 </Grid>

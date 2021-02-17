@@ -5,6 +5,7 @@ const apiUnidadesUrl = `${ipBackend}/unidade/`;
 const apiDepartamentoUrl = `${ipBackend}/departamento/`;
 const apiSetorUrl = `${ipBackend}/setor/`;
 const apiContratoUrl = `${ipBackend}/contrato/`;
+const apiVigenciaUrl = `${ipBackend}/vigencia/`;
 const apiMateriaisUrl = `${ipBackend}/material/`;
 const apiEstoqueUrl = `${ipBackend}/estoque/`;
 const apiServicoUrl = `${ipBackend}/servico/`;
@@ -89,6 +90,26 @@ export async function EditContrato(id, value) {
 
 export async function DeleteContrato(id) {
   const response = await axios.delete(`${apiContratoUrl}${id}`);
+  return response.data;
+}
+
+export async function Vigencia() {
+  const res = await axios.get(apiVigenciaUrl);
+  return res.data;
+}
+
+export async function InsertVigencia(value) {
+  const response = await axios.post(apiVigenciaUrl, value);
+  return response.data.id;
+}
+
+export async function EditVigencia(id, value) {
+  const response = await axios.post(`${apiVigenciaUrl}${id}`, value);
+  return response.data;
+}
+
+export async function DeleteVigencia(id) {
+  const response = await axios.delete(`${apiVigenciaUrl}${id}`);
   return response.data;
 }
 
