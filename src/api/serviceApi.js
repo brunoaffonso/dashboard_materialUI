@@ -160,54 +160,29 @@ export async function Servico() {
   return res.data;
 }
 
-export async function getServico(id) {
+export async function GetServico(id) {
   const res = await axios.get(`${apiServicoUrl}${id}`);
   return res.data;
 }
 
-export async function deleteServico(id) {
-  const res = await axios.delete(`${apiServicoUrl}${id}`);
+export async function DeleteServico(id) {
   const matServ = await MatServ();
   const reqs = matServ
     .filter((m) => m.numero_rs === id)
-    .forEach((s) => deleteMatServ(s.id));
-  return [res.data, reqs.data];
+    .forEach((s) => DeleteMatServ(s.id_mat_serv));
+  const res = await axios.delete(`${apiServicoUrl}${id}`);
+  return [res.data, reqs];
 }
 
-export async function deleteServico2(id) {
-  axios.defaults.baseURL = 'http://127.0.0.1:8000/';
-
-  const header = {
-    headers: {
-      Authorization: 'Bearer ' + localStorage.getItem('JWTAccess'),
-    },
-  };
-  const payload = {
-    testValue: 'Hello API',
-  };
-
-  axios
-    .delete(`servico/${id}`, payload, header)
-    .then((response) => {
-      console.log(response);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-
-  // const res = await axios.delete(`${apiServicoUrl}${id}`);
-  return null;
-}
-
-export async function insertServico(value) {
+export async function InsertServico(value) {
   const response = await axios.post(apiServicoUrl, value);
   return response.data;
 }
 
-export async function insertServico2(value) {
+export async function InsertServico2(value) {
   const response = await axios.post(apiServicoUrl, value);
-  const servicos = await getServices();
-  const serv = servicos
+  const servicos = await GetServices();
+  const [serv] = servicos
     .filter(
       (id) =>
         id.numero_rs === response.data.numero_rs &&
@@ -215,11 +190,17 @@ export async function insertServico2(value) {
     )
     .map((s) => {
       return {
-        id: s.id,
+        id: s.id_servico,
       };
     });
-  const idServ = serv[0];
-  return idServ.id;
+  const idServ = serv;
+  console.log(idServ);
+  return idServ.id_servico;
+}
+
+export async function EditServico(id, value) {
+  const response = await axios.post(`${apiServicoUrl}${id}`, value);
+  return response.data;
 }
 
 export async function MatServ() {
@@ -228,12 +209,12 @@ export async function MatServ() {
   return res.data;
 }
 
-export async function insertMatServ(value) {
+export async function InsertMatServ(value) {
   const response = await axios.post(apiMatServUrl, value);
   return response.data;
 }
 
-export async function deleteMatServ(id) {
+export async function DeleteMatServ(id) {
   const res = await axios.delete(`${apiMatServUrl}/${id}`);
   return res.data;
 }
@@ -243,18 +224,20 @@ export async function deleteMatServ(id) {
 //   return response.data.id;
 // }
 
-export async function getServices() {
+export async function GetServices() {
   const unidades = await Unidade();
   const matServ = await MatServ();
   const serv = await Servico();
   const mats = await Materiais();
   const res = serv.map((s) => {
     const reqs = matServ
-      .filter((m) => m.numero_rs === s.id)
+      .filter((m) => m.numero_rs === s.id_servico)
       .map((s) => {
-        const matDesc = mats.filter((material) => material.id === s.material);
+        const matDesc = mats.filter(
+          (material) => material.id_material === s.material
+        );
         return {
-          id: s.id,
+          id_servico: s.id_servico,
           numero_rs: s.numero_rs,
           material: s.material,
           descricao: matDesc[0],
@@ -262,14 +245,14 @@ export async function getServices() {
           comentarios: s.comentarios,
         };
       });
-    const unid = unidades.filter((u) => u.id === s.unidade);
+    const [unid] = unidades.filter((u) => u.id_unidade === s.unidade);
     return {
-      id: s.id,
+      id_servico: s.id_servico,
       numero_rs: s.numero_rs,
       numero_os: s.numero_os,
       data_abertura: s.data_abertura,
       data_fechamento: s.data_fechamento,
-      unidade: unid[0],
+      unidade: unid.name,
       departamento: s.departamento,
       setor: s.setor,
       obs: s.obs,

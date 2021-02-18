@@ -32,6 +32,7 @@ export default function FormEstoque({ onSave, items, setNull, materiaisList }) {
   const [responsavelRetirada, setResponsavelRetirada] = useState('');
   const [info, setInfo] = useState('');
   const [emEstoque, setEmEstoque] = useState(0);
+  const [quantidade, setQuantidade] = useState('');
   // const [booleanEmestoque, setBooleanEmEstoque] = useState(false);
 
   const setData = (data) => {
@@ -47,6 +48,7 @@ export default function FormEstoque({ onSave, items, setNull, materiaisList }) {
     setResponsavelRetirada(data.responsavel_retirada);
     setInfo(data.info);
     setEmEstoque(data.em_estoque);
+    setQuantidade(data.quantidade);
   };
 
   // if (material) {
@@ -66,6 +68,7 @@ export default function FormEstoque({ onSave, items, setNull, materiaisList }) {
     setResponsavelRetirada('');
     setInfo('');
     setEmEstoque(0);
+    setQuantidade('');
     setNull();
   };
 
@@ -94,6 +97,7 @@ export default function FormEstoque({ onSave, items, setNull, materiaisList }) {
       responsavel_retirada: responsavelRetirada,
       info: info,
       em_estoque: emEstoque,
+      quantidade: quantidade,
     };
     if (id) {
       await api.EditEstoque(id, data);
@@ -213,6 +217,13 @@ export default function FormEstoque({ onSave, items, setNull, materiaisList }) {
             label="Informações"
             value={info}
             onChange={(e) => setInfo(e.target.value)}
+          />
+        </FormControl>
+        <FormControl>
+          <TextField
+            label="Quantidade"
+            value={quantidade}
+            onChange={(e) => setQuantidade(e.target.value)}
           />
         </FormControl>
         <FormControlLabel

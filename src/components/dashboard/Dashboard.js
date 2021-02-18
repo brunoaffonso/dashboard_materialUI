@@ -39,6 +39,8 @@ import Vigencias from './Vigencias';
 import FormVigencia from './FormVigencia';
 import Estoques from './Estoques';
 import FormEstoque from './FormEstoque';
+import Servicos from './Servicos';
+import FormServico from './FormServico';
 
 function Copyright() {
   return (
@@ -156,6 +158,10 @@ export default function Dashboard() {
   const [selectedVigencia, setSelectedVigencia] = useState(null);
   const [estoque, setEstoque] = useState([]);
   const [selectedEstoque, setSelectedEstoque] = useState(null);
+  const [servico, setServico] = useState([]);
+  const [selectedServico, setSelectedServico] = useState(null);
+  const [matServ, setMatServ] = useState([]);
+  const [selectedMatServ, setSelectedMatServ] = useState(null);
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
 
@@ -203,6 +209,16 @@ export default function Dashboard() {
     setEstoque(estoques);
   };
 
+  const getServicos = async () => {
+    const servicos = await api.GetServices();
+    setServico(servicos);
+  };
+
+  const getMatServs = async () => {
+    const matServs = await api.MatServ();
+    setMatServ(matServs);
+  };
+
   const showData = () => {
     console.log(unidade);
     console.log(material);
@@ -211,6 +227,8 @@ export default function Dashboard() {
     console.log(contrato);
     console.log(vigencia);
     console.log(estoque);
+    console.log(servico);
+    console.log(matServ);
   };
 
   const setNull = () => {
@@ -221,6 +239,8 @@ export default function Dashboard() {
     setSelectedContrato(null);
     setSelectedVigencia(null);
     setSelectedEstoque(null);
+    setSelectedServico(null);
+    setSelectedMatServ(null);
   };
 
   const editMaterial = (mat) => {
@@ -270,6 +290,20 @@ export default function Dashboard() {
     setSelectedEstoque(res);
   };
 
+  const editServico = (serv) => {
+    const [res] = servico.filter(
+      (s) => parseInt(s.id_servico) === parseInt(serv)
+    );
+    setSelectedServico(res);
+  };
+
+  const editMatServ = (ms) => {
+    const [res] = matServ.filter(
+      (m) => parseInt(m.id_estoque) === parseInt(ms)
+    );
+    setSelectedMatServ(res);
+  };
+
   const setItem = (item) => {
     setMenu(item);
   };
@@ -282,6 +316,8 @@ export default function Dashboard() {
     getContratos();
     getVigencias();
     getEstoques();
+    getServicos();
+    getMatServs();
   }, []);
 
   return (
@@ -686,6 +722,32 @@ export default function Dashboard() {
                       listItems={estoque}
                       onUpdate={getEstoques}
                       editItem={editEstoque}
+                    />
+                  </Paper>
+                </Grid>
+              </>
+            )}
+            {menu === 'servico' && (
+              <>
+                <Grid item xs={12}>
+                  <Paper className={classes.paper}>
+                    <FormServico
+                      onSave={getServicos}
+                      items={selectedServico}
+                      setNull={setNull}
+                      unidades={unidade}
+                      departamentos={departamento}
+                      setores={setor}
+                      materiais={material}
+                    />
+                  </Paper>
+                </Grid>
+                <Grid item xs={12}>
+                  <Paper className={classes.paper}>
+                    <Servicos
+                      listItems={servico}
+                      onUpdate={getServicos}
+                      editItem={editServico}
                     />
                   </Paper>
                 </Grid>

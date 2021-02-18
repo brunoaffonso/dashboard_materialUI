@@ -3,7 +3,14 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import DashboardIcon from '@material-ui/icons/Dashboard';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import ApartmentIcon from '@material-ui/icons/Apartment';
+import LocationCityIcon from '@material-ui/icons/LocationCity';
+import BusinessIcon from '@material-ui/icons/Business';
+import DescriptionIcon from '@material-ui/icons/Description';
+import BuildIcon from '@material-ui/icons/Build';
+import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
+import CategoryIcon from '@material-ui/icons/Category';
+import TodayIcon from '@material-ui/icons/Today';
 
 export default function MainListItems({ setMenu }) {
   return (
@@ -14,47 +21,53 @@ export default function MainListItems({ setMenu }) {
         </ListItemIcon>
         <ListItemText primary="Dashboard" />
       </ListItem>
-      <ListItem button onClick={() => setMenu('material')}>
-        <ListItemIcon>
-          <ShoppingCartIcon />
-        </ListItemIcon>
-        <ListItemText primary="Materiais" />
-      </ListItem>
       <ListItem button onClick={() => setMenu('unidade')}>
         <ListItemIcon>
-          <ShoppingCartIcon />
+          <ApartmentIcon />
         </ListItemIcon>
         <ListItemText primary="Unidades" />
       </ListItem>
       <ListItem button onClick={() => setMenu('departamento')}>
         <ListItemIcon>
-          <ShoppingCartIcon />
+          <LocationCityIcon />
         </ListItemIcon>
         <ListItemText primary="Departamentos" />
       </ListItem>
       <ListItem button onClick={() => setMenu('setor')}>
         <ListItemIcon>
-          <ShoppingCartIcon />
+          <BusinessIcon />
         </ListItemIcon>
         <ListItemText primary="Setores" />
       </ListItem>
       <ListItem button onClick={() => setMenu('contrato')}>
         <ListItemIcon>
-          <ShoppingCartIcon />
+          <DescriptionIcon />
         </ListItemIcon>
         <ListItemText primary="Contratos" />
       </ListItem>
       <ListItem button onClick={() => setMenu('vigencia')}>
         <ListItemIcon>
-          <ShoppingCartIcon />
+          <TodayIcon />
         </ListItemIcon>
         <ListItemText primary="Vigências" />
       </ListItem>
+      <ListItem button onClick={() => setMenu('material')}>
+        <ListItemIcon>
+          <CategoryIcon />
+        </ListItemIcon>
+        <ListItemText primary="Materiais" />
+      </ListItem>
       <ListItem button onClick={() => setMenu('estoque')}>
         <ListItemIcon>
-          <ShoppingCartIcon />
+          <FormatListBulletedIcon />
         </ListItemIcon>
         <ListItemText primary="Estoque" />
+      </ListItem>
+      <ListItem button onClick={() => setMenu('servico')}>
+        <ListItemIcon>
+          <BuildIcon />
+        </ListItemIcon>
+        <ListItemText primary="Serviço" />
       </ListItem>
     </div>
   );

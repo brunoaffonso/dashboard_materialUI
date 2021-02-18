@@ -44,6 +44,7 @@ export default function Estoques({ listItems, onUpdate, editItem }) {
               <TableCell>Data de Entrada</TableCell>
               <TableCell>Data de Saída</TableCell>
               <TableCell>Local</TableCell>
+              <TableCell>Quantidade</TableCell>
               <TableCell>Em estoque</TableCell>
               <TableCell> </TableCell>
             </TableRow>
@@ -59,6 +60,7 @@ export default function Estoques({ listItems, onUpdate, editItem }) {
                   {mat.data_saida ? dateFormatList(mat.data_saida) : ''}
                 </TableCell>
                 <TableCell>{mat.localizacao}</TableCell>
+                <TableCell>{mat.quantidade}</TableCell>
                 <TableCell>{mat.em_estoque}</TableCell>
                 <TableCell>
                   <IconButton
