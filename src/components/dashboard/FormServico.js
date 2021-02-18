@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
-import MenuItem from '@material-ui/core/MenuItem';
 import * as api from '../../api/serviceApi';
 import { makeStyles } from '@material-ui/core/styles';
 import Select from '@material-ui/core/Select';
@@ -15,6 +14,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import { dateFormat } from '../../helpers/formaters';
+import MenuItem from '@material-ui/core/MenuItem';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,7 +28,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function FormServico({
   onSave,
-  items,
+  itemsServico,
+  itemsMatServ,
   setNull,
   unidades,
   departamentos,
@@ -35,7 +37,8 @@ export default function FormServico({
   materiais,
 }) {
   const classes = useStyles();
-  const [id, setId] = useState(null);
+  const [idServico, setIdServico] = useState(null);
+  const [idMatServ, setIdMatserv] = useState(null);
   const [numeroRs, setNumeroRs] = useState('');
   const [numeroOs, setNumeroOs] = useState('');
   const [abertura, setAbertura] = useState('');
@@ -45,12 +48,9 @@ export default function FormServico({
   const [setor, setSetor] = useState('');
   const [obs, setObs] = useState('');
   const [custo, setCusto] = useState('');
-  const [selectedUnidade, setSelectedUnidade] = useState('');
-  const [selectedDepto, setSelectedDepto] = useState('');
-  const [selectedSetor, setSelectedSetor] = useState('');
-  const [selectedMaterial, setSelectedMaterial] = useState('');
-  const [selectedQuantidade, setSelectedQuantidade] = useState('');
-  const [selectedObs, setSelectedObs] = useState('');
+  const [material, setMaterial] = useState('');
+  const [quantidade, setQuantidade] = useState('');
+  const [comentarios, setComentarios] = useState('');
   const [newService, setNewService] = useState('');
   const [newMatServ, setNewMatServ] = useState([]);
   const [serviceDisabled, setServiceDisabled] = useState(false);
@@ -63,8 +63,9 @@ export default function FormServico({
     }
   }, [newService]);
 
-  const setData = (data) => {
-    setId(data.id_servico);
+  const setDataServico = (data) => {
+    console.log(data);
+    setIdServico(data.id_servico);
     setNumeroRs(data.numero_rs);
     setNumeroOs(data.numero_os);
     setAbertura(data.data_abertura);
@@ -76,12 +77,20 @@ export default function FormServico({
     setCusto(data.custo);
   };
 
+  const setDataMatServ = (data) => {
+    setIdMatserv(data.id_mat_serv);
+    setNumeroRs(data.numero_rs);
+    setMaterial(data.material);
+    setQuantidade(data.quantidade);
+    setComentarios(data.comentarios);
+  };
+
   // if (material) {
   //   setData(material);
   // }
 
   const clearData = () => {
-    setId(null);
+    setIdServico(null);
     setNumeroRs('');
     setNumeroOs('');
     setAbertura('');
@@ -91,14 +100,25 @@ export default function FormServico({
     setSetor('');
     setObs('');
     setCusto('');
+    setMaterial('');
+    setQuantidade('');
+    setComentarios('');
+    setNewService('');
+    setNewMatServ([]);
     setNull();
   };
 
   useEffect(() => {
-    if (items) {
-      setData(items);
+    if (itemsServico) {
+      setDataServico(itemsServico);
     }
-  }, [items]);
+  }, [itemsServico]);
+
+  useEffect(() => {
+    if (itemsMatServ) {
+      setDataMatServ(itemsMatServ);
+    }
+  }, [itemsMatServ]);
 
   const handleClearData = (event) => {
     event.preventDefault();
@@ -118,10 +138,15 @@ export default function FormServico({
       obs: obs,
       custo: custo,
     };
-    if (id) {
-      await api.EditServico(id, data);
+    if (idServico) {
+      await api.EditServico(idServico, data);
     } else {
       await api.InsertServico(data);
+    }
+    if (idMatServ) {
+      await api.EditMatServ(idMatServ, data);
+    } else {
+      await api.InsertMatServ(data);
     }
     onSave();
     clearData();
@@ -129,38 +154,47 @@ export default function FormServico({
 
   const handleButtonServico = async (event) => {
     event.preventDefault();
-    const value = {
+    const data = {
       numero_rs: numeroRs,
       numero_os: numeroOs,
       data_abertura: abertura,
       data_fechamento: fechamento,
-      unidade: selectedUnidade,
-      departamento: selectedDepto,
-      setor: selectedSetor,
+      unidade: unidade,
+      departamento: departamento,
+      setor: setor,
       obs: obs,
     };
-    const resp = async (value) => {
-      const res = await api.InsertServico(value);
+    if (idServico) {
+      await api.EditServico(idServico, data);
+    } else {
+      const res = await api.InsertServico(data);
       setNewService(res);
-    };
-    await resp(value);
+    }
+    // const resp = async (value) => {
+    //   const res = await api.InsertServico(data);
+    //   setNewService(res);
+    // };
+    // await resp(value);
+    onSave();
+    clearData();
   };
 
   const handleButtonTempService = (event) => {
     event.preventDefault();
-    const mat = materiais.filter((m) => m.id === selectedMaterial);
+    const [mat] = materiais.filter((m) => m.id_material === material);
     const value = {
       numero_rs: newService,
-      material: mat[0].id_material,
-      quantidade: selectedQuantidade,
-      comentarios: selectedObs,
-      numero_item: mat[0].numero_item,
-      descricao: mat[0].descricao,
+      material: mat.id_material,
+      quantidade: quantidade,
+      comentarios: comentarios,
+      numero_item: mat.numero_item,
+      descricao: mat.descricao,
     };
     setNewMatServ((prevState) => [...prevState, value]);
-    setSelectedMaterial('');
-    setSelectedQuantidade('');
-    setSelectedObs('');
+    console.log(newMatServ);
+    setMaterial('');
+    setQuantidade('');
+    setComentarios('');
   };
 
   const saveMatServs = async (event) => {
@@ -174,33 +208,25 @@ export default function FormServico({
       };
       api.InsertMatServ(value);
     });
-    setNumeroRs('');
-    setNumeroOs('');
-    setAbertura('');
-    setFechamento('');
-    setSelectedUnidade('');
-    setSelectedDepto('');
-    setSelectedSetor('');
-    setObs('');
-    setSelectedMaterial('');
-    setSelectedQuantidade('');
-    setSelectedObs('');
-    setNewService('');
-    setNewMatServ([]);
+    clearData();
     setServiceDisabled((prevState) => !prevState);
     setMatServDisabled((prevState) => !prevState);
   };
 
+  const date = (value) => {
+    return new Date(value).toISOString();
+  };
+
   return (
     <div>
-      <h2>Adicionar Serviço {id && <span>({id})</span>}</h2>
+      <h2>Adicionar Serviço {idServico && <span>({idServico})</span>}</h2>
       <form className={classes.root} noValidate autoComplete="off">
         <FormControl>
           <TextField
             disabled={serviceDisabled}
             label="Número RS"
             value={numeroRs}
-            onInput={(e) => setNumeroRs(e.target.value)}
+            onInput={(e) => setNumeroRs(parseInt(e.target.value))}
           />
         </FormControl>
         <FormControl>
@@ -208,7 +234,7 @@ export default function FormServico({
             disabled={serviceDisabled}
             label="Número OS"
             value={numeroOs}
-            onInput={(e) => setNumeroOs(e.target.value)}
+            onInput={(e) => setNumeroOs(parseInt(e.target.value))}
           />
         </FormControl>
         <FormControl>
@@ -216,12 +242,20 @@ export default function FormServico({
             disabled={serviceDisabled}
             label="Data de Abertura"
             type="date"
-            defaultValue={abertura}
+            value={
+              abertura === '' || abertura === null ? '' : dateFormat(abertura)
+            }
+            onChange={(e) =>
+              e.target.value === ''
+                ? setAbertura(null)
+                : setAbertura(date(e.target.value))
+            }
             className={classes.textField}
-            onInput={(e) => setAbertura(e.target.value)}
             InputLabelProps={{
               shrink: true,
             }}
+            // defaultValue={abertura}
+            // onInput={(e) => setAbertura(e.target.value)}
           />
         </FormControl>
         <FormControl>
@@ -229,20 +263,44 @@ export default function FormServico({
             disabled={serviceDisabled}
             label="Data de Fechamento"
             type="date"
-            defaultValue={fechamento}
+            value={
+              fechamento === '' || fechamento === null
+                ? ''
+                : dateFormat(fechamento)
+            }
+            onChange={(e) =>
+              e.target.value === ''
+                ? setFechamento(null)
+                : setFechamento(date(e.target.value))
+            }
             className={classes.textField}
-            onInput={(e) => setFechamento(e.target.value)}
             InputLabelProps={{
               shrink: true,
             }}
+            // defaultValue={fechamento}
+            // onInput={(e) => setFechamento(e.target.value)}
           />
         </FormControl>
         <FormControl className={classes.formControl}>
-          <InputLabel>Unidade</InputLabel>
+          <TextField
+            select
+            disabled={serviceDisabled}
+            label="Unidade"
+            value={unidade ? unidade : ''}
+            onChange={(e) => setUnidade(parseInt(e.target.value))}
+          >
+            {unidades.map((unidade) => (
+              <MenuItem key={unidade.id_unidade} value={unidade.id_unidade}>
+                {unidade.name}
+              </MenuItem>
+            ))}
+          </TextField>
+          {/* <InputLabel>Unidade</InputLabel>
           <Select
             disabled={serviceDisabled}
             native
-            onChange={(e) => setSelectedUnidade(parseInt(e.target.value))}
+            value={unidade ? unidade : ''}
+            onChange={(e) => setUnidade(parseInt(e.target.value))}
           >
             <option aria-label="None" value="" />
             {unidades.map((unidade) => (
@@ -250,46 +308,48 @@ export default function FormServico({
                 {unidade.name}
               </option>
             ))}
-          </Select>
+          </Select> */}
         </FormControl>
         <FormControl className={classes.formControl}>
-          <InputLabel>Departamento</InputLabel>
-          <Select
+          <TextField
+            select
             disabled={serviceDisabled}
-            native
-            onChange={(e) => setSelectedDepto(parseInt(e.target.value))}
+            label="Departamento"
+            value={departamento ? departamento : ''}
+            onChange={(e) => setDepartamento(parseInt(e.target.value))}
           >
-            <option aria-label="None" value="" />
             {departamentos
-              .filter(
-                (departamento) => departamento.unidade === selectedUnidade
-              )
+              .filter((departamento) => departamento.unidade === unidade)
               .map((departamento) => (
-                <option
+                <MenuItem
                   key={departamento.id_departamento}
                   value={departamento.id_departamento}
                 >
                   {departamento.name}
-                </option>
+                </MenuItem>
               ))}
-          </Select>
+          </TextField>
         </FormControl>
         <FormControl className={classes.formControl}>
-          <InputLabel>Setor</InputLabel>
-          <Select
+          <TextField
+            select
             disabled={serviceDisabled}
-            native
-            onChange={(e) => setSelectedSetor(parseInt(e.target.value))}
+            label="Setor"
+            value={setor ? setor : ''}
+            onChange={(e) =>
+              e.target.value === ''
+                ? setSetor(null)
+                : setSetor(parseInt(e.target.value))
+            }
           >
-            <option aria-label="None" value="" />
             {setores
-              .filter((setor) => setor.departamento === selectedDepto)
+              .filter((setor) => setor.departamento === departamento)
               .map((setor) => (
-                <option key={setor.id_setor} value={setor.id_setor}>
+                <MenuItem key={setor.id_setor} value={setor.id_setor}>
                   {setor.name}
-                </option>
+                </MenuItem>
               ))}
-          </Select>
+          </TextField>
         </FormControl>
         <FormControl>
           <TextField
@@ -311,8 +371,19 @@ export default function FormServico({
             Inserir
           </Button>
         </FormControl>
+        <FormControl>
+          <Button
+            type="submit"
+            variant="contained"
+            color="secondary"
+            onClick={(e) => handleClearData(e)}
+          >
+            Limpar
+          </Button>
+        </FormControl>
       </form>
       <Divider />
+      <h3>Materiais do Serviço {idMatServ && <span>({idMatServ})</span>}</h3>
       <form className={classes.root} noValidate autoComplete="off">
         <FormControl>
           <TextField
@@ -327,7 +398,7 @@ export default function FormServico({
           <Select
             disabled={matServDisabled}
             native
-            onChange={(e) => setSelectedMaterial(parseInt(e.target.value))}
+            onChange={(e) => setMaterial(parseInt(e.target.value))}
           >
             <option aria-label="None" value="" />
             {materiais.map((material) => (
@@ -341,16 +412,16 @@ export default function FormServico({
           <TextField
             disabled={matServDisabled}
             label="Quantidade"
-            value={selectedQuantidade}
-            onInput={(e) => setSelectedQuantidade(e.target.value)}
+            value={quantidade}
+            onInput={(e) => setQuantidade(e.target.value)}
           />
         </FormControl>
         <FormControl>
           <TextField
             disabled={matServDisabled}
             label="Comentários"
-            value={selectedObs}
-            onInput={(e) => setSelectedObs(e.target.value)}
+            value={comentarios}
+            onInput={(e) => setComentarios(e.target.value)}
           />
         </FormControl>
         <FormControl>
@@ -366,6 +437,7 @@ export default function FormServico({
           </Button>
         </FormControl>
       </form>
+      <Divider />
       <TableContainer component={Paper}>
         <Table className={classes.table} aria-label="simple table">
           <TableHead>
@@ -394,7 +466,7 @@ export default function FormServico({
             type="submit"
             variant="contained"
             color="primary"
-            onClick={(e) => handleButton(e)}
+            onClick={(e) => saveMatServs(e)}
           >
             Enviar
           </Button>

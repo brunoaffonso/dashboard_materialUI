@@ -563,6 +563,29 @@ export default function Dashboard() {
                     </div>
                   </Paper>
                 </Grid>
+                <Grid item xs={3}>
+                  <Paper className={classes.paper}>
+                    <Title>Serviços Cadastrados</Title>
+                    <Typography component="p" variant="h4">
+                      {servico.length}
+                    </Typography>
+                    <Typography
+                      color="textSecondary"
+                      className={classes.depositContext}
+                    >
+                      {Date()}
+                    </Typography>
+                    <div>
+                      <Link
+                        color="primary"
+                        href="#"
+                        onClick={() => setMenu('servico')}
+                      >
+                        Detalhes
+                      </Link>
+                    </div>
+                  </Paper>
+                </Grid>
               </>
             )}
             {menu === 'material' && (
@@ -733,7 +756,8 @@ export default function Dashboard() {
                   <Paper className={classes.paper}>
                     <FormServico
                       onSave={getServicos}
-                      items={selectedServico}
+                      itemsServico={selectedServico}
+                      itemsMatServ={selectedMatServ}
                       setNull={setNull}
                       unidades={unidade}
                       departamentos={departamento}
@@ -747,7 +771,8 @@ export default function Dashboard() {
                     <Servicos
                       listItems={servico}
                       onUpdate={getServicos}
-                      editItem={editServico}
+                      editItemServico={editServico}
+                      editItemMatServ={editMatServ}
                     />
                   </Paper>
                 </Grid>

@@ -214,6 +214,11 @@ export async function InsertMatServ(value) {
   return response.data;
 }
 
+export async function EditMatServ(id, value) {
+  const response = await axios.post(`${apiMatServUrl}${id}`, value);
+  return response.data;
+}
+
 export async function DeleteMatServ(id) {
   const res = await axios.delete(`${apiMatServUrl}/${id}`);
   return res.data;
@@ -252,7 +257,8 @@ export async function GetServices() {
       numero_os: s.numero_os,
       data_abertura: s.data_abertura,
       data_fechamento: s.data_fechamento,
-      unidade: unid.name,
+      unidade: unid.id_unidade,
+      unidadeName: unid.name,
       departamento: s.departamento,
       setor: s.setor,
       obs: s.obs,

@@ -10,7 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import * as api from '../../api/serviceApi';
 import TableContainer from '@material-ui/core/TableContainer';
 import Paper from '@material-ui/core/Paper';
-import { dateFormatList } from '../../helpers/formaters';
+import { dateFormatList, dateFormat } from '../../helpers/formaters';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import Box from '@material-ui/core/Box';
@@ -31,14 +31,14 @@ const useStyles = makeStyles({
 });
 
 function Row(props) {
-  const { row } = props;
+  const { row, onUpdate, editItemServico, editItemMatServ } = props;
   const [open, setOpen] = React.useState(false);
   const classes = useRowStyles();
 
-  const servicoDesc = async (id, event) => {
+  const deleteServico = async (id, event) => {
     event.preventDefault();
     const resp = await api.DeleteServico(id);
-    console.log(resp);
+    onUpdate();
   };
 
   return (
@@ -53,7 +53,8 @@ function Row(props) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell align="left">{row.unidade}</TableCell>
+        <TableCell align="left">{row.id_servico}</TableCell>
+        <TableCell align="left">{row.unidadeName}</TableCell>
         <TableCell align="center">
           {dateFormatList(row.data_fechamento)}
         </TableCell>
@@ -62,16 +63,16 @@ function Row(props) {
         <TableCell align="left">{row.custo}</TableCell>
         <TableCell align="left">
           <IconButton
-            aria-label="delete"
+            aria-label="edit"
             className={classes.margin}
-            onClick={(e) => console.log(row)}
+            onClick={(e) => editItemServico(row.id_servico)}
           >
             <EditOutlinedIcon color="primary" />
           </IconButton>
           <IconButton
             aria-label="delete"
             className={classes.margin}
-            onClick={(e) => servicoDesc(row.id_servico, e)}
+            onClick={(e) => deleteServico(row.id_servico, e)}
           >
             <DeleteForeverOutlinedIcon color="secondary" />
           </IconButton>
@@ -115,7 +116,12 @@ function Row(props) {
   );
 }
 
-export default function Servicos({ listItems, onUpdate, editItem }) {
+export default function Servicos({
+  listItems,
+  onUpdate,
+  editItemServico,
+  editItemMatServ,
+}) {
   const deleteItem = async (id) => {
     await api.DeleteServico(id);
     onUpdate();
@@ -131,6 +137,7 @@ export default function Servicos({ listItems, onUpdate, editItem }) {
           <TableHead>
             <TableRow>
               <TableCell />
+              <TableCell align="left">ID Serviço</TableCell>
               <TableCell align="left">Unidade</TableCell>
               <TableCell align="center">Data de Fechamento</TableCell>
               <TableCell align="center">RS</TableCell>
@@ -142,7 +149,13 @@ export default function Servicos({ listItems, onUpdate, editItem }) {
           </TableHead>
           <TableBody>
             {listItems.map((row) => (
-              <Row key={row.id_servico} row={row} />
+              <Row
+                key={row.id_servico}
+                row={row}
+                onUpdate={onUpdate}
+                editItemServico={editItemServico}
+                editItemMatServ={editItemMatServ}
+              />
             ))}
           </TableBody>
         </Table>
