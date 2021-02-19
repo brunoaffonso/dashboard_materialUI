@@ -4,8 +4,6 @@ import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 import * as api from '../../api/serviceApi';
 import { makeStyles } from '@material-ui/core/styles';
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
 import Divider from '@material-ui/core/Divider';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -16,6 +14,9 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { dateFormat } from '../../helpers/formaters';
 import MenuItem from '@material-ui/core/MenuItem';
+import IconButton from '@material-ui/core/IconButton';
+import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
+import DeleteForeverOutlinedIcon from '@material-ui/icons/DeleteForeverOutlined';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,6 +36,7 @@ export default function FormServico({
   departamentos,
   setores,
   materiais,
+  editItemMatServ,
 }) {
   const classes = useStyles();
   const [idServico, setIdServico] = useState(null);
@@ -51,20 +53,21 @@ export default function FormServico({
   const [material, setMaterial] = useState('');
   const [quantidade, setQuantidade] = useState('');
   const [comentarios, setComentarios] = useState('');
-  const [newService, setNewService] = useState('');
   const [newMatServ, setNewMatServ] = useState([]);
   const [serviceDisabled, setServiceDisabled] = useState(false);
   const [matServDisabled, setMatServDisabled] = useState(true);
 
   useEffect(() => {
-    if (newService) {
-      setServiceDisabled((prevState) => !prevState);
-      setMatServDisabled((prevState) => !prevState);
+    if (idServico) {
+      setServiceDisabled(true);
+      setMatServDisabled(false);
+    } else {
+      setServiceDisabled(false);
+      setMatServDisabled(true);
     }
-  }, [newService]);
+  }, [idServico]);
 
   const setDataServico = (data) => {
-    console.log(data);
     setIdServico(data.id_servico);
     setNumeroRs(data.numero_rs);
     setNumeroOs(data.numero_os);
@@ -75,6 +78,33 @@ export default function FormServico({
     setSetor(data.setor);
     setObs(data.obs);
     setCusto(data.custo);
+    editMaterialList(data.reqs);
+  };
+
+  const editMaterialList = (value) => {
+    setNewMatServ([]);
+    value.forEach((ms) => {
+      const value = {
+        id_mat_serv: ms.id_mat_serv,
+        numero_rs: ms.numero_rs,
+        material: ms.material,
+        quantidade: ms.quantidade,
+        comentarios: ms.comentarios,
+        numero_item: ms.descricao.numero_item,
+        descricao: ms.descricao.descricao,
+      };
+      setNewMatServ((prevState) => [...prevState, value]);
+    });
+  };
+
+  const editNewMatServ = (id) => {
+    const res = newMatServ.filter((ms) => ms.id_mat_serv === id);
+    console.log(res);
+  };
+
+  const deleteNewMatServ = (id) => {
+    const res = newMatServ.filter((ms) => ms.id_mat_serv !== id);
+    setNewMatServ(res);
   };
 
   const setDataMatServ = (data) => {
@@ -91,6 +121,7 @@ export default function FormServico({
 
   const clearData = () => {
     setIdServico(null);
+    setIdMatserv(null);
     setNumeroRs('');
     setNumeroOs('');
     setAbertura('');
@@ -103,7 +134,6 @@ export default function FormServico({
     setMaterial('');
     setQuantidade('');
     setComentarios('');
-    setNewService('');
     setNewMatServ([]);
     setNull();
   };
@@ -125,33 +155,6 @@ export default function FormServico({
     clearData();
   };
 
-  const handleButton = async (event) => {
-    event.preventDefault();
-    const data = {
-      numeroRs: numeroRs,
-      numeroOs: numeroOs,
-      abertura: abertura,
-      fechamento: fechamento,
-      unidade: unidade,
-      departamento: departamento,
-      setor: setor,
-      obs: obs,
-      custo: custo,
-    };
-    if (idServico) {
-      await api.EditServico(idServico, data);
-    } else {
-      await api.InsertServico(data);
-    }
-    if (idMatServ) {
-      await api.EditMatServ(idMatServ, data);
-    } else {
-      await api.InsertMatServ(data);
-    }
-    onSave();
-    clearData();
-  };
-
   const handleButtonServico = async (event) => {
     event.preventDefault();
     const data = {
@@ -166,32 +169,31 @@ export default function FormServico({
     };
     if (idServico) {
       await api.EditServico(idServico, data);
+      setMatServDisabled(false);
     } else {
       const res = await api.InsertServico(data);
-      setNewService(res);
+      setIdServico(res);
     }
-    // const resp = async (value) => {
-    //   const res = await api.InsertServico(data);
-    //   setNewService(res);
-    // };
-    // await resp(value);
     onSave();
-    clearData();
   };
 
   const handleButtonTempService = (event) => {
     event.preventDefault();
     const [mat] = materiais.filter((m) => m.id_material === material);
     const value = {
-      numero_rs: newService,
+      numero_rs: idServico,
       material: mat.id_material,
       quantidade: quantidade,
       comentarios: comentarios,
       numero_item: mat.numero_item,
       descricao: mat.descricao,
     };
+    console.log(idMatServ);
+    console.log(material);
+    console.log(quantidade);
+    console.log(comentarios);
+    console.log(idServico);
     setNewMatServ((prevState) => [...prevState, value]);
-    console.log(newMatServ);
     setMaterial('');
     setQuantidade('');
     setComentarios('');
@@ -199,18 +201,30 @@ export default function FormServico({
 
   const saveMatServs = async (event) => {
     event.preventDefault();
-    newMatServ.forEach((ms) => {
+    newMatServ.forEach(async (ms) => {
       const value = {
         numero_rs: ms.numero_rs,
         material: ms.material,
         quantidade: ms.quantidade,
         comentarios: ms.comentarios,
       };
-      api.InsertMatServ(value);
+      if (idMatServ) {
+        await api.EditMatServ(idMatServ, value);
+      } else {
+        await api.InsertMatServ(value);
+      }
     });
     clearData();
-    setServiceDisabled((prevState) => !prevState);
-    setMatServDisabled((prevState) => !prevState);
+    onSave();
+    setServiceDisabled(false);
+    setMatServDisabled(true);
+  };
+
+  const deleteMatServ = async (id, event) => {
+    event.preventDefault();
+    await api.DeleteMatServ(id);
+    deleteNewMatServ(id);
+    onSave();
   };
 
   const date = (value) => {
@@ -295,20 +309,6 @@ export default function FormServico({
               </MenuItem>
             ))}
           </TextField>
-          {/* <InputLabel>Unidade</InputLabel>
-          <Select
-            disabled={serviceDisabled}
-            native
-            value={unidade ? unidade : ''}
-            onChange={(e) => setUnidade(parseInt(e.target.value))}
-          >
-            <option aria-label="None" value="" />
-            {unidades.map((unidade) => (
-              <option key={unidade.id_unidade} value={unidade.id_unidade}>
-                {unidade.name}
-              </option>
-            ))}
-          </Select> */}
         </FormControl>
         <FormControl className={classes.formControl}>
           <TextField
@@ -373,6 +373,7 @@ export default function FormServico({
         </FormControl>
         <FormControl>
           <Button
+            disabled={serviceDisabled}
             type="submit"
             variant="contained"
             color="secondary"
@@ -389,24 +390,24 @@ export default function FormServico({
           <TextField
             disabled
             label=" "
-            value={`ID: ${newService} | RS: ${numeroRs}`}
+            value={`ID: ${idServico} | RS: ${numeroRs}`}
             size="small"
           />
         </FormControl>
         <FormControl className={classes.formControl}>
-          <InputLabel>Material</InputLabel>
-          <Select
+          <TextField
+            select
             disabled={matServDisabled}
-            native
+            label="Material"
+            value={material ? material : ''}
             onChange={(e) => setMaterial(parseInt(e.target.value))}
           >
-            <option aria-label="None" value="" />
             {materiais.map((material) => (
-              <option key={material.id_material} value={material.id_material}>
-                {material.numero_item} - {material.descricao}
-              </option>
+              <MenuItem key={material.id_material} value={material.id_material}>
+                {material.descricao}
+              </MenuItem>
             ))}
-          </Select>
+          </TextField>
         </FormControl>
         <FormControl>
           <TextField
@@ -436,33 +437,9 @@ export default function FormServico({
             Inserir
           </Button>
         </FormControl>
-      </form>
-      <Divider />
-      <TableContainer component={Paper}>
-        <Table className={classes.table} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="center">Código</TableCell>
-              <TableCell>Descrição</TableCell>
-              <TableCell align="center">Quantidade</TableCell>
-              <TableCell align="center">Comentários</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {newMatServ.map((row) => (
-              <TableRow key={row.id}>
-                <TableCell align="center">{row.numero_item}</TableCell>
-                <TableCell component="th" scope="row">
-                  {row.descricao}
-                </TableCell>
-                <TableCell align="center">{row.quantidade}</TableCell>
-                <TableCell align="center">{row.comentarios}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
         <FormControl>
           <Button
+            disabled={matServDisabled}
             type="submit"
             variant="contained"
             color="primary"
@@ -473,6 +450,7 @@ export default function FormServico({
         </FormControl>
         <FormControl>
           <Button
+            disabled={matServDisabled}
             type="submit"
             variant="contained"
             color="secondary"
@@ -481,6 +459,48 @@ export default function FormServico({
             Limpar
           </Button>
         </FormControl>
+      </form>
+      <Divider />
+      <TableContainer component={Paper}>
+        <Table className={classes.table} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell align="center">Código</TableCell>
+              <TableCell>Descrição</TableCell>
+              <TableCell align="center">Quantidade</TableCell>
+              <TableCell align="center">Comentários</TableCell>
+              <TableCell align="center"> </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {newMatServ.map((row) => (
+              <TableRow key={row.id_mat_serv}>
+                <TableCell align="center">{row.numero_item}</TableCell>
+                <TableCell component="th" scope="row">
+                  {row.descricao}
+                </TableCell>
+                <TableCell align="center">{row.quantidade}</TableCell>
+                <TableCell align="center">{row.comentarios}</TableCell>
+                <TableCell align="left">
+                  <IconButton
+                    aria-label="edit"
+                    className={classes.margin}
+                    onClick={() => editItemMatServ(row.id_mat_serv)}
+                  >
+                    <EditOutlinedIcon color="primary" />
+                  </IconButton>
+                  <IconButton
+                    aria-label="delete"
+                    className={classes.margin}
+                    onClick={(e) => deleteMatServ(row.id_mat_serv, e)}
+                  >
+                    <DeleteForeverOutlinedIcon color="secondary" />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </TableContainer>
     </div>
   );

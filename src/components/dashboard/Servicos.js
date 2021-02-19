@@ -10,7 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import * as api from '../../api/serviceApi';
 import TableContainer from '@material-ui/core/TableContainer';
 import Paper from '@material-ui/core/Paper';
-import { dateFormatList, dateFormat } from '../../helpers/formaters';
+import { dateFormatList } from '../../helpers/formaters';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import Box from '@material-ui/core/Box';
@@ -31,13 +31,13 @@ const useStyles = makeStyles({
 });
 
 function Row(props) {
-  const { row, onUpdate, editItemServico, editItemMatServ } = props;
+  const { row, onUpdate, editItemServico } = props;
   const [open, setOpen] = React.useState(false);
   const classes = useRowStyles();
 
   const deleteServico = async (id, event) => {
     event.preventDefault();
-    const resp = await api.DeleteServico(id);
+    await api.DeleteServico(id);
     onUpdate();
   };
 
@@ -65,7 +65,7 @@ function Row(props) {
           <IconButton
             aria-label="edit"
             className={classes.margin}
-            onClick={(e) => editItemServico(row.id_servico)}
+            onClick={() => editItemServico(row.id_servico)}
           >
             <EditOutlinedIcon color="primary" />
           </IconButton>
@@ -89,11 +89,12 @@ function Row(props) {
                     <TableCell>Descrição</TableCell>
                     <TableCell align="center">Quantidade</TableCell>
                     <TableCell align="left">Comentários</TableCell>
+                    <TableCell align="left"> </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {row.reqs.map((matServ) => (
-                    <TableRow key={matServ.id}>
+                    <TableRow key={matServ.id_mat_serv}>
                       <TableCell component="th" scope="row" align="center">
                         {matServ.descricao.numero_item}
                       </TableCell>
@@ -116,16 +117,11 @@ function Row(props) {
   );
 }
 
-export default function Servicos({
-  listItems,
-  onUpdate,
-  editItemServico,
-  editItemMatServ,
-}) {
-  const deleteItem = async (id) => {
-    await api.DeleteServico(id);
-    onUpdate();
-  };
+export default function Servicos({ listItems, onUpdate, editItemServico }) {
+  // const deleteItem = async (id) => {
+  //   await api.DeleteServico(id);
+  //   onUpdate();
+  // };
 
   const classes = useStyles();
   return (
@@ -144,7 +140,6 @@ export default function Servicos({
               <TableCell align="center">OS</TableCell>
               <TableCell align="left">Custo</TableCell>
               <TableCell align="left"></TableCell>
-              <TableCell align="left"></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -154,7 +149,6 @@ export default function Servicos({
                 row={row}
                 onUpdate={onUpdate}
                 editItemServico={editItemServico}
-                editItemMatServ={editItemMatServ}
               />
             ))}
           </TableBody>

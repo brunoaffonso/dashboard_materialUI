@@ -299,7 +299,7 @@ export default function Dashboard() {
 
   const editMatServ = (ms) => {
     const [res] = matServ.filter(
-      (m) => parseInt(m.id_estoque) === parseInt(ms)
+      (m) => parseInt(m.id_mat_serv) === parseInt(ms)
     );
     setSelectedMatServ(res);
   };
@@ -763,6 +763,7 @@ export default function Dashboard() {
                       departamentos={departamento}
                       setores={setor}
                       materiais={material}
+                      editItemMatServ={editMatServ}
                     />
                   </Paper>
                 </Grid>
@@ -772,7 +773,6 @@ export default function Dashboard() {
                       listItems={servico}
                       onUpdate={getServicos}
                       editItemServico={editServico}
-                      editItemMatServ={editMatServ}
                     />
                   </Paper>
                 </Grid>

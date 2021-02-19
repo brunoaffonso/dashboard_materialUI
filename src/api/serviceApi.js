@@ -238,14 +238,14 @@ export async function GetServices() {
     const reqs = matServ
       .filter((m) => m.numero_rs === s.id_servico)
       .map((s) => {
-        const matDesc = mats.filter(
+        const [matDesc] = mats.filter(
           (material) => material.id_material === s.material
         );
         return {
-          id_servico: s.id_servico,
+          id_mat_serv: s.id_mat_serv,
           numero_rs: s.numero_rs,
           material: s.material,
-          descricao: matDesc[0],
+          descricao: matDesc,
           quantidade: s.quantidade,
           comentarios: s.comentarios,
         };
