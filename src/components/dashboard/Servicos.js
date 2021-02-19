@@ -24,11 +24,11 @@ const useRowStyles = makeStyles();
 //   event.preventDefault();
 // }
 
-const useStyles = makeStyles({
-  table: {
-    minWidth: 650,
-  },
-});
+// const useStyles = makeStyles({
+//   table: {
+//     minWidth: 650,
+//   },
+// });
 
 function Row(props) {
   const { row, onUpdate, editItemServico } = props;
@@ -82,6 +82,9 @@ function Row(props) {
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box margin={1}>
+              Data de Abertura: {dateFormatList(row.data_abertura)}-{row.departamento}-{row.setor}
+            </Box>
+            <Box margin={1}>
               <Table size="small" aria-label="purchases">
                 <TableHead>
                   <TableRow>
@@ -123,7 +126,7 @@ export default function Servicos({ listItems, onUpdate, editItemServico }) {
   //   onUpdate();
   // };
 
-  const classes = useStyles();
+  // const classes = useStyles();
   return (
     <React.Fragment>
       <Title>Materiais</Title>

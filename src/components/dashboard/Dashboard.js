@@ -756,6 +756,9 @@ export default function Dashboard() {
                   <Paper className={classes.paper}>
                     <FormServico
                       onSave={getServicos}
+                      onSaveMatServ={getMatServs}
+                      listItems={servico}
+                      listItemsMatServ={matServ}
                       itemsServico={selectedServico}
                       itemsMatServ={selectedMatServ}
                       setNull={setNull}

@@ -29,6 +29,9 @@ const useStyles = makeStyles((theme) => ({
 
 export default function FormServico({
   onSave,
+  onSaveMatServ,
+  listItems,
+  listItemsMatServ,
   itemsServico,
   itemsMatServ,
   setNull,
@@ -53,19 +56,42 @@ export default function FormServico({
   const [material, setMaterial] = useState('');
   const [quantidade, setQuantidade] = useState('');
   const [comentarios, setComentarios] = useState('');
+  const [matServ, setMatServ] = useState([])
   const [newMatServ, setNewMatServ] = useState([]);
   const [serviceDisabled, setServiceDisabled] = useState(false);
   const [matServDisabled, setMatServDisabled] = useState(true);
 
   useEffect(() => {
     if (idServico) {
-      setServiceDisabled(true);
+      setServiceDisabled(false);
       setMatServDisabled(false);
     } else {
       setServiceDisabled(false);
       setMatServDisabled(true);
     }
   }, [idServico]);
+
+  useEffect(() => {
+    if (listItemsMatServ) {
+      setItemsMatServ(listItemsMatServ)
+    }
+  }, [listItemsMatServ, idServico])
+
+  const setItemsMatServ = (data) => {
+    const newData = data.filter(d => d.numero_rs === idServico).map(r => {
+      const [mat] = materiais.filter((m) => m.id_material === r.material);
+      return {
+        id_mat_serv: r.id_mat_serv,
+        numero_rs: idServico,
+        material: mat.id_material,
+        quantidade: r.quantidade,
+        comentarios: r.comentarios,
+        numero_item: mat.numero_item,
+        descricao: mat.descricao,
+      }
+    })
+    setMatServ(newData);
+  }
 
   const setDataServico = (data) => {
     setIdServico(data.id_servico);
@@ -78,34 +104,24 @@ export default function FormServico({
     setSetor(data.setor);
     setObs(data.obs);
     setCusto(data.custo);
-    editMaterialList(data.reqs);
+    // editMaterialList(data.reqs);
   };
 
-  const editMaterialList = (value) => {
-    setNewMatServ([]);
-    value.forEach((ms) => {
-      const value = {
-        id_mat_serv: ms.id_mat_serv,
-        numero_rs: ms.numero_rs,
-        material: ms.material,
-        quantidade: ms.quantidade,
-        comentarios: ms.comentarios,
-        numero_item: ms.descricao.numero_item,
-        descricao: ms.descricao.descricao,
-      };
-      setNewMatServ((prevState) => [...prevState, value]);
-    });
-  };
-
-  const editNewMatServ = (id) => {
-    const res = newMatServ.filter((ms) => ms.id_mat_serv === id);
-    console.log(res);
-  };
-
-  const deleteNewMatServ = (id) => {
-    const res = newMatServ.filter((ms) => ms.id_mat_serv !== id);
-    setNewMatServ(res);
-  };
+  // const editMaterialList = (value) => {
+  //   setNewMatServ([]);
+  //   value.forEach((ms) => {
+  //     const value = {
+  //       id_mat_serv: ms.id_mat_serv,
+  //       numero_rs: ms.numero_rs,
+  //       material: ms.material,
+  //       quantidade: ms.quantidade,
+  //       comentarios: ms.comentarios,
+  //       numero_item: ms.descricao.numero_item,
+  //       descricao: ms.descricao.descricao,
+  //     };
+  //     setNewMatServ((prevState) => [...prevState, value]);
+  //   });
+  // };
 
   const setDataMatServ = (data) => {
     setIdMatserv(data.id_mat_serv);
@@ -114,10 +130,6 @@ export default function FormServico({
     setQuantidade(data.quantidade);
     setComentarios(data.comentarios);
   };
-
-  // if (material) {
-  //   setData(material);
-  // }
 
   const clearData = () => {
     setIdServico(null);
@@ -170,6 +182,7 @@ export default function FormServico({
     if (idServico) {
       await api.EditServico(idServico, data);
       setMatServDisabled(false);
+      clearData();
     } else {
       const res = await api.InsertServico(data);
       setIdServico(res);
@@ -177,53 +190,33 @@ export default function FormServico({
     onSave();
   };
 
-  const handleButtonTempService = (event) => {
+  const handleButtonMatServ = async (event) => {
     event.preventDefault();
-    const [mat] = materiais.filter((m) => m.id_material === material);
-    const value = {
+    const data = {
       numero_rs: idServico,
-      material: mat.id_material,
+      material: material,
       quantidade: quantidade,
       comentarios: comentarios,
-      numero_item: mat.numero_item,
-      descricao: mat.descricao,
     };
-    console.log(idMatServ);
-    console.log(material);
-    console.log(quantidade);
-    console.log(comentarios);
-    console.log(idServico);
-    setNewMatServ((prevState) => [...prevState, value]);
+    console.log(data)
+    if (idMatServ) {
+      await api.EditMatServ(idMatServ, data);
+    } else {
+      const res = await api.InsertMatServ(data);
+      console.log(res)
+    }
+    onSave();
+    onSaveMatServ();
+    setIdMatserv(null);
     setMaterial('');
     setQuantidade('');
     setComentarios('');
   };
 
-  const saveMatServs = async (event) => {
-    event.preventDefault();
-    newMatServ.forEach(async (ms) => {
-      const value = {
-        numero_rs: ms.numero_rs,
-        material: ms.material,
-        quantidade: ms.quantidade,
-        comentarios: ms.comentarios,
-      };
-      if (idMatServ) {
-        await api.EditMatServ(idMatServ, value);
-      } else {
-        await api.InsertMatServ(value);
-      }
-    });
-    clearData();
-    onSave();
-    setServiceDisabled(false);
-    setMatServDisabled(true);
-  };
-
   const deleteMatServ = async (id, event) => {
     event.preventDefault();
     await api.DeleteMatServ(id);
-    deleteNewMatServ(id);
+    onSaveMatServ();
     onSave();
   };
 
@@ -431,10 +424,10 @@ export default function FormServico({
             type="submit"
             variant="contained"
             color="primary"
-            onClick={handleButtonTempService}
+            onClick={handleButtonMatServ}
             className={classes.button}
           >
-            Inserir
+            Adicionar Material
           </Button>
         </FormControl>
         <FormControl>
@@ -443,9 +436,9 @@ export default function FormServico({
             type="submit"
             variant="contained"
             color="primary"
-            onClick={(e) => saveMatServs(e)}
+            onClick={(e) => handleButtonServico(e)}
           >
-            Enviar
+            Salvar Alterações
           </Button>
         </FormControl>
         <FormControl>
@@ -473,7 +466,7 @@ export default function FormServico({
             </TableRow>
           </TableHead>
           <TableBody>
-            {newMatServ.map((row) => (
+            {matServ.map((row) => (
               <TableRow key={row.id_mat_serv}>
                 <TableCell align="center">{row.numero_item}</TableCell>
                 <TableCell component="th" scope="row">
