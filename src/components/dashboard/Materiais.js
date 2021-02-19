@@ -38,21 +38,23 @@ export default function Materiais({ listItems, onUpdate, editItem }) {
         <Table className={classes.table} size="small">
           <TableHead>
             <TableRow>
-              <TableCell>N. Item</TableCell>
-              <TableCell>Descrição</TableCell>
-              <TableCell>Quantidade Anual</TableCell>
-              <TableCell>Valor</TableCell>
-              <TableCell> </TableCell>
+              <TableCell align="center">N. Item</TableCell>
+              <TableCell align="center">Descrição</TableCell>
+              <TableCell align="center">Quantidade Anual</TableCell>
+              <TableCell align="center">Valor</TableCell>
+              <TableCell align="center"> </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {listItems.map((mat) => (
               <TableRow key={mat.id_material}>
-                <TableCell>{mat.numero_item}</TableCell>
-                <TableCell>{mat.descricao}</TableCell>
-                <TableCell>{mat.quantidade_ano}</TableCell>
-                <TableCell>R$ {formatNumber(mat.valor)}</TableCell>
-                <TableCell>
+                <TableCell align="center">{mat.numero_item}</TableCell>
+                <TableCell align="center">{mat.descricao}</TableCell>
+                <TableCell align="center">{mat.quantidade_ano}</TableCell>
+                <TableCell align="center">
+                  R$ {formatNumber(mat.valor)}
+                </TableCell>
+                <TableCell align="center">
                   <IconButton
                     aria-label="edit"
                     className={classes.margin}

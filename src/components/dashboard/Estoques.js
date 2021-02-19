@@ -38,31 +38,35 @@ export default function Estoques({ listItems, onUpdate, editItem }) {
         <Table className={classes.table} size="small">
           <TableHead>
             <TableRow>
-              <TableCell>Material</TableCell>
-              <TableCell>Fabricante</TableCell>
-              <TableCell>Modelo</TableCell>
-              <TableCell>Data de Entrada</TableCell>
-              <TableCell>Data de Saída</TableCell>
-              <TableCell>Local</TableCell>
-              <TableCell>Quantidade</TableCell>
-              <TableCell>Em estoque</TableCell>
-              <TableCell> </TableCell>
+              <TableCell align="center">Material</TableCell>
+              <TableCell align="center">Fabricante</TableCell>
+              <TableCell align="center">Modelo</TableCell>
+              <TableCell align="center">Data de Entrada</TableCell>
+              <TableCell align="center">Data de Saída</TableCell>
+              <TableCell align="center">Local</TableCell>
+              <TableCell align="center">Quantidade</TableCell>
+              <TableCell align="center">Em estoque</TableCell>
+              <TableCell align="center"> </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {listItems.map((mat) => (
               <TableRow key={mat.id_estoque}>
-                <TableCell>{mat.material}</TableCell>
-                <TableCell>{mat.fabricante}</TableCell>
-                <TableCell>{mat.modelo}</TableCell>
-                <TableCell>{dateFormatList(mat.data_entrada)}</TableCell>
-                <TableCell>
+                <TableCell align="center">{mat.material}</TableCell>
+                <TableCell align="center">{mat.fabricante}</TableCell>
+                <TableCell align="center">{mat.modelo}</TableCell>
+                <TableCell align="center">
+                  {dateFormatList(mat.data_entrada)}
+                </TableCell>
+                <TableCell align="center">
                   {mat.data_saida ? dateFormatList(mat.data_saida) : ''}
                 </TableCell>
-                <TableCell>{mat.localizacao}</TableCell>
-                <TableCell>{mat.quantidade}</TableCell>
-                <TableCell>{mat.em_estoque}</TableCell>
-                <TableCell>
+                <TableCell align="center">{mat.localizacao}</TableCell>
+                <TableCell align="center">{mat.quantidade}</TableCell>
+                <TableCell align="center">
+                  {mat.em_estoque === 0 ? 'Não' : 'Sim'}
+                </TableCell>
+                <TableCell align="center">
                   <IconButton
                     aria-label="edit"
                     className={classes.margin}

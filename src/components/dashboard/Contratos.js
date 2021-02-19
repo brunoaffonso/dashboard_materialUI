@@ -38,23 +38,23 @@ export default function Contratos({ listItems, onUpdate, editItem }) {
         <Table className={classes.table} size="small">
           <TableHead>
             <TableRow>
-              <TableCell>N. Contrato</TableCell>
-              <TableCell>Processo</TableCell>
-              <TableCell>Descrição</TableCell>
-              <TableCell>Início</TableCell>
-              <TableCell> </TableCell>
+              <TableCell align="center">N. Contrato</TableCell>
+              <TableCell align="center">Processo</TableCell>
+              <TableCell align="center">Descrição</TableCell>
+              <TableCell align="center">Início</TableCell>
+              <TableCell align="center"> </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {listItems.map((cont) => (
               <TableRow key={cont.id_contrato}>
-                <TableCell>{cont.numero}</TableCell>
-                <TableCell>{cont.processo}</TableCell>
-                <TableCell>{cont.descricao}</TableCell>
-                <TableCell>
+                <TableCell align="center">{cont.numero}</TableCell>
+                <TableCell align="center">{cont.processo}</TableCell>
+                <TableCell align="center">{cont.descricao}</TableCell>
+                <TableCell align="center">
                   {cont.inicio ? dateFormatList(cont.inicio) : ''}
                 </TableCell>
-                <TableCell>
+                <TableCell align="center">
                   <IconButton
                     aria-label="edit"
                     className={classes.margin}

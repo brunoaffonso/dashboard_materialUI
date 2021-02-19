@@ -30,7 +30,6 @@ const useStyles = makeStyles((theme) => ({
 export default function FormServico({
   onSave,
   onSaveMatServ,
-  listItems,
   listItemsMatServ,
   itemsServico,
   itemsMatServ,
@@ -56,8 +55,7 @@ export default function FormServico({
   const [material, setMaterial] = useState('');
   const [quantidade, setQuantidade] = useState('');
   const [comentarios, setComentarios] = useState('');
-  const [matServ, setMatServ] = useState([])
-  const [newMatServ, setNewMatServ] = useState([]);
+  const [matServ, setMatServ] = useState([]);
   const [serviceDisabled, setServiceDisabled] = useState(false);
   const [matServDisabled, setMatServDisabled] = useState(true);
 
@@ -73,25 +71,27 @@ export default function FormServico({
 
   useEffect(() => {
     if (listItemsMatServ) {
-      setItemsMatServ(listItemsMatServ)
+      setItemsMatServ(listItemsMatServ);
     }
-  }, [listItemsMatServ, idServico])
+  }, [listItemsMatServ, idServico]);
 
   const setItemsMatServ = (data) => {
-    const newData = data.filter(d => d.numero_rs === idServico).map(r => {
-      const [mat] = materiais.filter((m) => m.id_material === r.material);
-      return {
-        id_mat_serv: r.id_mat_serv,
-        numero_rs: idServico,
-        material: mat.id_material,
-        quantidade: r.quantidade,
-        comentarios: r.comentarios,
-        numero_item: mat.numero_item,
-        descricao: mat.descricao,
-      }
-    })
+    const newData = data
+      .filter((d) => d.numero_rs === idServico)
+      .map((r) => {
+        const [mat] = materiais.filter((m) => m.id_material === r.material);
+        return {
+          id_mat_serv: r.id_mat_serv,
+          numero_rs: idServico,
+          material: mat.id_material,
+          quantidade: r.quantidade,
+          comentarios: r.comentarios,
+          numero_item: mat.numero_item,
+          descricao: mat.descricao,
+        };
+      });
     setMatServ(newData);
-  }
+  };
 
   const setDataServico = (data) => {
     setIdServico(data.id_servico);
@@ -104,24 +104,7 @@ export default function FormServico({
     setSetor(data.setor);
     setObs(data.obs);
     setCusto(data.custo);
-    // editMaterialList(data.reqs);
   };
-
-  // const editMaterialList = (value) => {
-  //   setNewMatServ([]);
-  //   value.forEach((ms) => {
-  //     const value = {
-  //       id_mat_serv: ms.id_mat_serv,
-  //       numero_rs: ms.numero_rs,
-  //       material: ms.material,
-  //       quantidade: ms.quantidade,
-  //       comentarios: ms.comentarios,
-  //       numero_item: ms.descricao.numero_item,
-  //       descricao: ms.descricao.descricao,
-  //     };
-  //     setNewMatServ((prevState) => [...prevState, value]);
-  //   });
-  // };
 
   const setDataMatServ = (data) => {
     setIdMatserv(data.id_mat_serv);
@@ -146,7 +129,6 @@ export default function FormServico({
     setMaterial('');
     setQuantidade('');
     setComentarios('');
-    setNewMatServ([]);
     setNull();
   };
 
@@ -198,12 +180,10 @@ export default function FormServico({
       quantidade: quantidade,
       comentarios: comentarios,
     };
-    console.log(data)
     if (idMatServ) {
       await api.EditMatServ(idMatServ, data);
     } else {
-      const res = await api.InsertMatServ(data);
-      console.log(res)
+      await api.InsertMatServ(data);
     }
     onSave();
     onSaveMatServ();
@@ -261,8 +241,6 @@ export default function FormServico({
             InputLabelProps={{
               shrink: true,
             }}
-            // defaultValue={abertura}
-            // onInput={(e) => setAbertura(e.target.value)}
           />
         </FormControl>
         <FormControl>
@@ -284,8 +262,6 @@ export default function FormServico({
             InputLabelProps={{
               shrink: true,
             }}
-            // defaultValue={fechamento}
-            // onInput={(e) => setFechamento(e.target.value)}
           />
         </FormControl>
         <FormControl className={classes.formControl}>

@@ -53,15 +53,15 @@ function Row(props) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell align="left">{row.id_servico}</TableCell>
-        <TableCell align="left">{row.unidadeName}</TableCell>
+        <TableCell align="center">{row.id_servico}</TableCell>
+        <TableCell align="center">{row.unidadeName}</TableCell>
         <TableCell align="center">
           {dateFormatList(row.data_fechamento)}
         </TableCell>
         <TableCell align="center">{row.numero_rs}</TableCell>
         <TableCell align="center">{row.numero_os}</TableCell>
-        <TableCell align="left">{row.custo}</TableCell>
-        <TableCell align="left">
+        <TableCell align="center">{row.custo}</TableCell>
+        <TableCell align="center">
           <IconButton
             aria-label="edit"
             className={classes.margin}
@@ -82,17 +82,18 @@ function Row(props) {
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box margin={1}>
-              Data de Abertura: {dateFormatList(row.data_abertura)}-{row.departamento}-{row.setor}
+              Data de Abertura: {dateFormatList(row.data_abertura)}-
+              {row.departamento}-{row.setor}
             </Box>
             <Box margin={1}>
               <Table size="small" aria-label="purchases">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Cód. Material</TableCell>
-                    <TableCell>Descrição</TableCell>
+                    <TableCell align="center">Cód. Material</TableCell>
+                    <TableCell align="center">Descrição</TableCell>
                     <TableCell align="center">Quantidade</TableCell>
-                    <TableCell align="left">Comentários</TableCell>
-                    <TableCell align="left"> </TableCell>
+                    <TableCell align="center">Comentários</TableCell>
+                    <TableCell align="center"> </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -101,11 +102,11 @@ function Row(props) {
                       <TableCell component="th" scope="row" align="center">
                         {matServ.descricao.numero_item}
                       </TableCell>
-                      <TableCell component="th" scope="row">
+                      <TableCell component="th" scope="row" align="center">
                         {matServ.descricao.descricao}
                       </TableCell>
                       <TableCell align="center">{matServ.quantidade}</TableCell>
-                      <TableCell align="left">
+                      <TableCell align="center">
                         {matServ.comentarios ? matServ.comentarios : '-'}
                       </TableCell>
                     </TableRow>
@@ -121,11 +122,6 @@ function Row(props) {
 }
 
 export default function Servicos({ listItems, onUpdate, editItemServico }) {
-  // const deleteItem = async (id) => {
-  //   await api.DeleteServico(id);
-  //   onUpdate();
-  // };
-
   // const classes = useStyles();
   return (
     <React.Fragment>
@@ -136,13 +132,13 @@ export default function Servicos({ listItems, onUpdate, editItemServico }) {
           <TableHead>
             <TableRow>
               <TableCell />
-              <TableCell align="left">ID Serviço</TableCell>
-              <TableCell align="left">Unidade</TableCell>
+              <TableCell align="center">ID Serviço</TableCell>
+              <TableCell align="center">Unidade</TableCell>
               <TableCell align="center">Data de Fechamento</TableCell>
               <TableCell align="center">RS</TableCell>
               <TableCell align="center">OS</TableCell>
-              <TableCell align="left">Custo</TableCell>
-              <TableCell align="left"></TableCell>
+              <TableCell align="center">Custo</TableCell>
+              <TableCell align="center"></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

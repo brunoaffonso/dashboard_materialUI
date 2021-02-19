@@ -53,7 +53,6 @@ export async function DeleteDepartamento(id) {
 
 export async function Setor() {
   const res = await axios.get(apiSetorUrl);
-  // console.log(res.data);
   return res.data;
 }
 
@@ -74,7 +73,6 @@ export async function DeleteSetor(id) {
 
 export async function Contrato() {
   const res = await axios.get(apiContratoUrl);
-  // console.log(res.data);
   return res.data;
 }
 
@@ -135,7 +133,6 @@ export async function DeleteMaterial(id) {
 
 export async function Estoque() {
   const res = await axios.get(apiEstoqueUrl);
-  // console.log(res.data);
   return res.data;
 }
 
@@ -156,7 +153,6 @@ export async function DeleteEstoque(id) {
 
 export async function Servico() {
   const res = await axios.get(apiServicoUrl);
-  // console.log(res.data);
   return res.data;
 }
 
@@ -205,7 +201,6 @@ export async function EditServico(id, value) {
 
 export async function MatServ() {
   const res = await axios.get(apiMatServUrl);
-  // console.log(res.data);
   return res.data;
 }
 
@@ -223,11 +218,6 @@ export async function DeleteMatServ(id) {
   const res = await axios.delete(`${apiMatServUrl}/${id}`);
   return res.data;
 }
-
-// export async function insertMatServ(value) {
-//   const response = await axios.post(apiMatServUrl, value);
-//   return response.data.id;
-// }
 
 export async function GetServices() {
   const unidades = await Unidade();

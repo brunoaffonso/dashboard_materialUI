@@ -38,29 +38,29 @@ export default function Vigencias({ listItems, onUpdate, editItem }) {
         <Table className={classes.table} size="small">
           <TableHead>
             <TableRow>
-              <TableCell>N. Contrato / Ano</TableCell>
-              <TableCell>Descrição</TableCell>
-              <TableCell>Renovação</TableCell>
-              <TableCell>Início</TableCell>
-              <TableCell>Fim</TableCell>
-              <TableCell>BDI</TableCell>
-              <TableCell> </TableCell>
+              <TableCell align="center">N. Contrato / Ano</TableCell>
+              <TableCell align="center">Descrição</TableCell>
+              <TableCell align="center">Renovação</TableCell>
+              <TableCell align="center">Início</TableCell>
+              <TableCell align="center">Fim</TableCell>
+              <TableCell align="center">BDI</TableCell>
+              <TableCell align="center"> </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {listItems.map((cont) => (
               <TableRow key={cont.id_vigencia}>
-                <TableCell>{cont.contrato}</TableCell>
-                <TableCell>{cont.descricao}</TableCell>
-                <TableCell>{cont.renovacao}</TableCell>
-                <TableCell>
+                <TableCell align="center">{cont.contrato}</TableCell>
+                <TableCell align="center">{cont.descricao}</TableCell>
+                <TableCell align="center">{cont.renovacao}</TableCell>
+                <TableCell align="center">
                   {cont.inicio ? dateFormatList(cont.inicio) : ''}
                 </TableCell>
-                <TableCell>
+                <TableCell align="center">
                   {cont.fim ? dateFormatList(cont.fim) : ''}
                 </TableCell>
-                <TableCell>{formatNumber(cont.bdi)} %</TableCell>
-                <TableCell>
+                <TableCell align="center">{formatNumber(cont.bdi)} %</TableCell>
+                <TableCell align="center">
                   <IconButton
                     aria-label="edit"
                     className={classes.margin}

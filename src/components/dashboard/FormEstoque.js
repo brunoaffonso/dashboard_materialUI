@@ -189,7 +189,7 @@ export default function FormEstoque({ onSave, items, setNull, materiaisList }) {
                 : dateFormat(dataSaida)
             }
             onChange={(e) =>
-              e.target.value === ''
+              e.target.value === '' || null
                 ? setDataSaida(null)
                 : setDataSaida(date(e.target.value))
             }

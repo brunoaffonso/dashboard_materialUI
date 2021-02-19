@@ -757,7 +757,6 @@ export default function Dashboard() {
                     <FormServico
                       onSave={getServicos}
                       onSaveMatServ={getMatServs}
-                      listItems={servico}
                       listItemsMatServ={matServ}
                       itemsServico={selectedServico}
                       itemsMatServ={selectedMatServ}
