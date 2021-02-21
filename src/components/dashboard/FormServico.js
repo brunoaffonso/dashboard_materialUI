@@ -270,6 +270,7 @@ export default function FormServico({
             disabled={serviceDisabled}
             label="Unidade"
             value={unidade ? unidade : ''}
+            defaultValue=""
             onChange={(e) => setUnidade(parseInt(e.target.value))}
           >
             {unidades.map((unidade) => (
@@ -285,6 +286,7 @@ export default function FormServico({
             disabled={serviceDisabled}
             label="Departamento"
             value={departamento ? departamento : ''}
+            defaultValue=""
             onChange={(e) => setDepartamento(parseInt(e.target.value))}
           >
             {departamentos
@@ -305,6 +307,7 @@ export default function FormServico({
             disabled={serviceDisabled}
             label="Setor"
             value={setor ? setor : ''}
+            defaultValue=""
             onChange={(e) =>
               e.target.value === ''
                 ? setSetor(null)
@@ -369,6 +372,7 @@ export default function FormServico({
             disabled={matServDisabled}
             label="Material"
             value={material ? material : ''}
+            defaultValue=""
             onChange={(e) => setMaterial(parseInt(e.target.value))}
           >
             {materiais.map((material) => (

@@ -10,6 +10,12 @@ const apiMateriaisUrl = `${ipBackend}/material/`;
 const apiEstoqueUrl = `${ipBackend}/estoque/`;
 const apiServicoUrl = `${ipBackend}/servico/`;
 const apiMatServUrl = `${ipBackend}/matserv/`;
+const apiDataUrl = `${ipBackend}/data/`;
+
+export async function FullData() {
+  const res = await axios.get(apiDataUrl);
+  return res.data;
+}
 
 export async function Unidade() {
   const res = await axios.get(apiUnidadesUrl);
@@ -220,6 +226,11 @@ export async function DeleteMatServ(id) {
 }
 
 export async function GetServices() {
+  const res = await axios.get(`${apiServicoUrl}/data`);
+  return res.data;
+}
+
+export async function GetServices2() {
   const unidades = await Unidade();
   const matServ = await MatServ();
   const serv = await Servico();

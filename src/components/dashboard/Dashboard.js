@@ -164,6 +164,7 @@ export default function Dashboard() {
   const [selectedMatServ, setSelectedMatServ] = useState(null);
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
+  const [fullData, setFullData] = useState([]);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -219,6 +220,20 @@ export default function Dashboard() {
     setMatServ(matServs);
   };
 
+  const getFullData = async () => {
+    const fullData = await api.FullData();
+    setMaterial(fullData.material);
+    setUnidade(fullData.unidade);
+    setDepartamento(fullData.departamento);
+    setSetor(fullData.setor);
+    setContrato(fullData.contrato);
+    setVigencia(fullData.vigencia);
+    setEstoque(fullData.estoque);
+    setServico(fullData.fullServices);
+    setMatServ(fullData.matServ);
+    setFullData(fullData);
+  };
+
   const showData = () => {
     console.log(unidade);
     console.log(material);
@@ -229,6 +244,7 @@ export default function Dashboard() {
     console.log(estoque);
     console.log(servico);
     console.log(matServ);
+    console.log(fullData);
   };
 
   const setNull = () => {
@@ -309,15 +325,7 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    getMateriais();
-    getUnidades();
-    getDepartamentos();
-    getSetores();
-    getContratos();
-    getVigencias();
-    getEstoques();
-    getServicos();
-    getMatServs();
+    getFullData();
   }, []);
 
   return (
