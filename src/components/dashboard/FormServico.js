@@ -17,6 +17,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import IconButton from '@material-ui/core/IconButton';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteForeverOutlinedIcon from '@material-ui/icons/DeleteForeverOutlined';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -204,6 +206,12 @@ export default function FormServico({
     return new Date(value).toISOString();
   };
 
+  const selectUnidade = (value) => {
+    setUnidade(value);
+    setDepartamento('');
+    setSetor('');
+  };
+
   return (
     <div>
       <h2>Adicionar Serviço {idServico && <span>({idServico})</span>}</h2>
@@ -265,13 +273,28 @@ export default function FormServico({
           />
         </FormControl>
         <FormControl className={classes.formControl}>
+          <InputLabel>Unidade</InputLabel>
+          <Select
+            disabled={serviceDisabled}
+            native
+            value={unidade ? unidade : ''}
+            onChange={(e) => selectUnidade(parseInt(e.target.value))}
+          >
+            <option aria-label="None" value="" />
+            {unidades.map((unidade) => (
+              <option key={unidade.id_unidade} value={unidade.id_unidade}>
+                {unidade.name}
+              </option>
+            ))}
+          </Select>
+        </FormControl>
+        {/* <FormControl className={classes.formControl}>
           <TextField
             select
             disabled={serviceDisabled}
             label="Unidade"
             value={unidade ? unidade : ''}
-            defaultValue=""
-            onChange={(e) => setUnidade(parseInt(e.target.value))}
+            onChange={(e) => selectUnidade(parseInt(e.target.value))}
           >
             {unidades.map((unidade) => (
               <MenuItem key={unidade.id_unidade} value={unidade.id_unidade}>
@@ -279,14 +302,35 @@ export default function FormServico({
               </MenuItem>
             ))}
           </TextField>
-        </FormControl>
+        </FormControl> */}
         <FormControl className={classes.formControl}>
+          <InputLabel>Departamento</InputLabel>
+          <Select
+            disabled={serviceDisabled}
+            native
+            value={departamento ? departamento : ''}
+            onChange={(e) => setDepartamento(parseInt(e.target.value))}
+          >
+            <option aria-label="None" value="" />
+            {departamentos
+              .filter((departamento) => departamento.unidade === unidade)
+              .map((departamento) => (
+                <option
+                  key={departamento.id_departamento}
+                  value={departamento.id_departamento}
+                >
+                  {departamento.name}
+                </option>
+              ))}
+          </Select>
+        </FormControl>
+        {/* <FormControl className={classes.formControl}>
           <TextField
             select
             disabled={serviceDisabled}
             label="Departamento"
             value={departamento ? departamento : ''}
-            defaultValue=""
+            // defaultValue=""
             onChange={(e) => setDepartamento(parseInt(e.target.value))}
           >
             {departamentos
@@ -300,16 +344,38 @@ export default function FormServico({
                 </MenuItem>
               ))}
           </TextField>
-        </FormControl>
+        </FormControl> */}
         <FormControl className={classes.formControl}>
+          <InputLabel>Setor</InputLabel>
+          <Select
+            disabled={serviceDisabled}
+            native
+            value={setor ? setor : ''}
+            onChange={(e) =>
+              e.target.value === ' ' || e.target.value === null
+                ? setSetor(null)
+                : setSetor(parseInt(e.target.value))
+            }
+          >
+            <option aria-label="None" value="" />
+            {setores
+              .filter((setor) => setor.departamento === departamento)
+              .map((setor) => (
+                <option key={setor.id_setor} value={setor.id_setor}>
+                  {setor.name}
+                </option>
+              ))}
+          </Select>
+        </FormControl>
+        {/* <FormControl className={classes.formControl}>
           <TextField
             select
             disabled={serviceDisabled}
             label="Setor"
             value={setor ? setor : ''}
-            defaultValue=""
+            // defaultValue=""
             onChange={(e) =>
-              e.target.value === ''
+              e.target.value === ' ' || e.target.value === null
                 ? setSetor(null)
                 : setSetor(parseInt(e.target.value))
             }
@@ -322,7 +388,7 @@ export default function FormServico({
                 </MenuItem>
               ))}
           </TextField>
-        </FormControl>
+        </FormControl> */}
         <FormControl>
           <TextField
             disabled={serviceDisabled}

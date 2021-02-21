@@ -325,6 +325,15 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
+    // getMateriais();
+    // getUnidades();
+    // getDepartamentos();
+    // getSetores();
+    // getContratos();
+    // getVigencias();
+    // getEstoques();
+    // getServicos();
+    // getMatServs();
     getFullData();
   }, []);
 
