@@ -223,15 +223,6 @@ export default function Dashboard() {
 
   const getFullData = async () => {
     const fullData = await api.FullData();
-    if (
-      fullData.message ===
-        `Can't add new command when connection is in closed state` ||
-      `This socket has been ended by the other party`
-    ) {
-      setError('Erro de conexão com o Banco de Dados');
-      return [];
-    }
-    console.log(fullData.message);
     setMaterial(fullData.material);
     setUnidade(fullData.unidade);
     setDepartamento(fullData.departamento);
