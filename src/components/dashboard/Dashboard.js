@@ -165,6 +165,7 @@ export default function Dashboard() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const [fullData, setFullData] = useState([]);
+  const [error, setError] = useState('');
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -222,6 +223,15 @@ export default function Dashboard() {
 
   const getFullData = async () => {
     const fullData = await api.FullData();
+    if (
+      fullData.message ===
+        `Can't add new command when connection is in closed state` ||
+      `This socket has been ended by the other party`
+    ) {
+      setError('Erro de conexão com o Banco de Dados');
+      return [];
+    }
+    console.log(fullData.message);
     setMaterial(fullData.material);
     setUnidade(fullData.unidade);
     setDepartamento(fullData.departamento);
@@ -325,6 +335,12 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
+    if (error) {
+      alert('Erro de conexão com o Banco de Dados');
+    }
+  }, [error]);
+
+  useEffect(() => {
     // getMateriais();
     // getUnidades();
     // getDepartamentos();
@@ -387,7 +403,7 @@ export default function Dashboard() {
         </div>
         <Divider />
         <List>
-          <MainListItems setMenu={setItem} />
+          <MainListItems setMenu={setItem} error={error} />
         </List>
         <Divider />
         <List>

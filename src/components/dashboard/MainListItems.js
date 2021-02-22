@@ -12,7 +12,7 @@ import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
 import CategoryIcon from '@material-ui/icons/Category';
 import TodayIcon from '@material-ui/icons/Today';
 
-export default function MainListItems({ setMenu }) {
+export default function MainListItems({ setMenu, error }) {
   return (
     <div>
       <ListItem button onClick={() => setMenu('dashboard')}>
