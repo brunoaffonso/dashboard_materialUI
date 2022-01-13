@@ -156,8 +156,8 @@ export default function FormServico({
     const data = {
       numero_rs: numeroRs,
       numero_os: numeroOs,
-      data_abertura: abertura,
-      data_fechamento: fechamento,
+      data_abertura: dateFormat(abertura),
+      data_fechamento: dateFormat(fechamento),
       unidade: unidade,
       departamento: departamento,
       setor: setor,

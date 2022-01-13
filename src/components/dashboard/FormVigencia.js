@@ -67,8 +67,8 @@ export default function FormVigencia({ onSave, items, setNull, contratos }) {
     const data = {
       contrato: contrato,
       renovacao: renovacao,
-      inicio: inicio,
-      fim: fim,
+      inicio: dateFormat(inicio),
+      fim: dateFormat(fim),
       bdi: bdi,
       descricao: descricao,
     };

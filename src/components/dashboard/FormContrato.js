@@ -59,7 +59,7 @@ export default function FormContrato({ onSave, items, setNull }) {
     event.preventDefault();
     const data = {
       numero: numero,
-      inicio: inicio,
+      inicio: dateFormat(inicio),
       processo: processo,
       descricao: descricao,
     };
