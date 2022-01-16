@@ -92,7 +92,7 @@ export default function FormEstoque({ onSave, items, setNull, materiaisList }) {
       numero_serie: numeroSerie,
       desenho: desenho,
       data_entrada: dateFormat(dataEntrada),
-      data_saida: dateFormat(dataSaida),
+      data_saida: dataSaida === '' ? null : dateFormat(dataSaida),
       localizacao: localizacao,
       responsavel_retirada: responsavelRetirada,
       info: info,
