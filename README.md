@@ -17,10 +17,6 @@ How this app was made in portuguese, see a little translate of main points below
 - `Serviços `-> **Services**
 - `Vigencia `-> **Contract Period**
 
-## Project in Action
-This project is hosted in Google Cloud Platform Instance
-[Live demo](http://brunoaffonso.com/dashboard)
-
 ## Installation
 Building and running the project in your local dev environment is very easy. Be sure you have [Git](https://git-scm.com/downloads) and [Node.js](https://nodejs.org/) installed, then follow the directions below.
 
